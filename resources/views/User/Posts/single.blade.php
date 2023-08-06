@@ -111,12 +111,22 @@ $Nosidebar='';
         <h4 class="text-center">Post Comments</h4>
         @foreach ($comments as $comment)
         <div class="comment">
-        <div class="commenter-info"><img src="{{ url('Images/Avatar/', $comment->user->avatar)}}" class="rounded-circle" alt="">
-        {{ $comment->user->name }}</div>
+        <div class="commenter-info">
+            @if($comment->user->avatar)
+            <img src="{{ url('Images/Avatar/', $comment->user->avatar)}}" class="rounded-circle" alt="">
+            @else
+            <img src="{{ url('img.png')}}" class="rounded-circle" alt="">
+
+            @endif
+            {{ $comment->user->name }}</div>
         <span>{{ $comment->comment }}</span>
-        @if($comment->user_id == auth()->id())
+        {{--  --}}
+        
         <div class="editcommentbtn">
+            @if($post->user_id == auth()->id() || $comment->user_id == auth()->id())
         <a href="{{ route('dlt.comment',$comment->id) }}" class="text-danger">{{ __('messages.dlt') }}</a>
+        @endif
+        @if($comment->user_id == auth()->id())
         <a href="" class="text-success">{{ __('messages.edit') }}</a>
 </div>
 

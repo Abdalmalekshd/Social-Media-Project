@@ -65,9 +65,13 @@ $Nosidebar='';
                         {{ __('messages.report') }}                    
 
                     </li></a>  
-
-                    <a href="{{ route('User.follow.cancel',$bookmark->post->user->id) }}" title="{{ __('messages.unfllw') }}  "><li> {{ __('messages.unfllw') }}  </li>
-
+                    @if( \App\models\Follower::where('user_id',Auth::user()->id)->where('followed_id',$bookmark->post->user->id)->first())
+                    <button  user_id='{{$bookmark->post->user->id}}' class="unfollow" title="{{ __('messages.unfllw') }}  "><li> {{ __('messages.unfllw') }}  </li>
+                        
+                    @else
+                    <button  user_id='{{ $bookmark->post->user->id }}' class="btn btn-primary followbtn">{{ __('messages.fllw') }}</button>
+                    @endif
+                    
                     </a>
                         @endif
                     
@@ -253,6 +257,71 @@ $(document).on('click','.dltbookmarkpost',function(e){
 });
 
         //End Delete Bookmarked Post 
+
+//Start follow user 
+$(document).on('click','.followbtn',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.follow') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End follow user 
+
+
+//Start Delete follow user 
+
+$(document).on('click','.unfollow',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.follow.cancel') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+        //End Delete follow user
+
 
 </script>
 

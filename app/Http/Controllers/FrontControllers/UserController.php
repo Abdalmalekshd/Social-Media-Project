@@ -48,9 +48,9 @@ class UserController extends Controller
         return view('User.UsersToFollow.UserProfile',$data);
     }
 
-    public function follow($id){
+    public function follow(Request $req){
         
-        $user=User::find($id);
+        $user=User::find($req->id);
 
         if(!$user)
         return redirect()->route('user.home')->with(['error'=>'This User Does Not Exist']);
@@ -60,18 +60,24 @@ class UserController extends Controller
         'followed_id'=>$user->id
         ]);
 
-    return redirect()->back();
+        return response()->json([
+            "status" => true,
+            'msg' => 'User followed Success'
+        ]);
     }
     
-    public function cancelfollow($id){
-        $follower=Follower::where('user_id',Auth::user()->id)->where('followed_id',$id)->first();
+    public function cancelfollow(Request $req){
+        $follower=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->first();
 
         if(!$follower)
         return redirect()->route('user.home')->with(['error'=>'You Dont Follow This User']);
 
         $follower->delete();
 
-        return redirect()->back();
+        return response()->json([
+            "status" => true,
+            'msg' => 'User Unfollowed Success'
+        ]);
     }
 
     public function Block($id){

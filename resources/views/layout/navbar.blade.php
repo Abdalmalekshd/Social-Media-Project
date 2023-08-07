@@ -27,7 +27,9 @@
             @endif
             <span>{{ $user->name }}</span>
             @if(! \App\models\Follower::where('user_id',Auth::user()->id)->where('followed_id',$user->id)->first())
-            <a href="{{ route('User.follow',$user->id) }}" class="btn btn-primary followbtn">{{ __('messages.fllw') }}</a>
+            <button  user_id='{{ $user->id}}' class="btn btn-primary followbtn">{{ __('messages.fllw') }}</button>
+            
+            
             @endif
         </li></a>
             @endforeach

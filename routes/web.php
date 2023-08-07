@@ -132,9 +132,9 @@ Route::group(['prefix'=>'User'],function(){
 
     Route::get('Profile/{id}','UserController@UserProfile')->name('Show.User.Profile'); //others Users
 
-    Route::get('follow/{id}','UserController@follow')->name('User.follow');
+    Route::post('follow','UserController@follow')->name('User.follow');
     
-    Route::get('cancelfollow/{id}','UserController@cancelfollow')->name('User.follow.cancel');
+    Route::post('cancelfollow','UserController@cancelfollow')->name('User.follow.cancel');
     
 
     Route::get('Block/{id}','UserController@Block')->name('User.block');

@@ -33,10 +33,12 @@ $Nosidebar='';
 
 
     @if(! \App\Models\Follower::where('user_id',auth()->id())->where('followed_id',$user->id)->first())
-        <a class='btn btn-primary' href="{{ route('User.follow',$user->id) }}">{{ __('messages.fllw') }}</a>
-    @else
-    <a class='btn btn-default' href="{{ route('User.follow.cancel',$user->id) }}">{{ __('messages.unfllw') }}</a>
-
+        <button  user_id='{{ $user->id }}' class="btn btn-primary followbtn">{{ __('messages.fllw') }}</button>
+    
+        @else
+    <button user_id='{{$user->id}}' title="{{ __('messages.unfllw') }} " class="btn btn-default unfollow"><li> {{ __('messages.unfllw') }}  </li>
+            
+        
         @endif
 </div>
 @endforeach
@@ -60,8 +62,15 @@ $Nosidebar='';
             {{ $users->name }}
         </label>
     
-            <a class='btn btn-primary' href="{{ route('User.follow',$users->id) }}">{{ __('messages.fllw') }}</a>
-        
+
+            @if(! \App\Models\Follower::where('user_id',auth()->id())->where('followed_id',$users->id)->first())
+            <button  user_id='{{ $users->id }}' class="btn btn-primary followbtn">{{ __('messages.fllw') }}</button>
+    
+            @else
+        <button user_id='{{$users->id}}' title="{{ __('messages.unfllw') }}" class="btn btn-default unfollow"><li> {{ __('messages.unfllw') }} </li>
+            
+        @endif
+
     </div> 
  @endforeach
 
@@ -93,7 +102,70 @@ $Nosidebar='';
 
 </style>
 
+<script>
+//Start follow user 
+$(document).on('click','.followbtn',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.follow') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End follow user 
 
 
+//Start Delete follow user 
+
+$(document).on('click','.unfollow',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.follow.cancel') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+        //End Delete follow user
+</script>
 
 @endsection

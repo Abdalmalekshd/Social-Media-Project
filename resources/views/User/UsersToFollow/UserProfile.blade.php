@@ -44,14 +44,20 @@ $Nosidebar='';
         <a class="btn btn-default editProfilebtn" href="{{ route('user.profile.edit') }}">{{ __('messages.edtprf')}}</a>
         @else
         @if($follower)
-        <a class="btn btn-default editProfilebtn" href="{{ route('User.follow.cancel',$user->id) }}">{{ __('messages.unfllw')}}</a>
+        <div class="unfllw">
+        <button user_id='{{$user->id}}' title="{{ __('messages.unfllw') }} "  class="btn btn-default unfollow"><li> {{ __('messages.unfllw') }}  </li>
+        </div>
         <a class="btn btn-danger editProfilebtn blkuser" href="{{ route('User.block',$user->id) }}">{{ __('messages.blck') }}</a>
         <a class="btn btn-danger editProfilebtn blkuser" href="{{ route('get.report',$user->id) }}">{{ __('messages.report') }}</a>
         
         @else
 
         @if(!$blockeduser)
-        <a class="btn btn-primary editProfilebtn" href="{{ route('User.follow',$user->id) }}">{{ __('messages.fllw') }}</a>
+        <div class="unfllw">
+
+        <button  user_id='{{ $user->id }}' class="btn btn-primary  followbtn">{{ __('messages.fllw') }}</button>
+      </div>
+        
         @else
         <a class="btn btn-danger editProfilebtn blkuser" href="{{ route('User.UnBlock',$user->id) }}">{{ __('messages.unblck') }}</a>
         
@@ -149,7 +155,85 @@ This User Has Blocked You
   margin-right: -10px;
   width: 200px;
 }
+
+.unfllw button{
+  margin: 0 70px ;
+  border-radius: 3px;
+  border: 1px solid var(--white);
+  padding: .4em .6em;
+  cursor: pointer;
+  margin-right: -10px;
+  width: 200px;
+
+}
 </style>
 
+
+<script>
+  
+//Start follow user 
+$(document).on('click','.followbtn',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.follow') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End follow user 
+
+
+//Start Delete follow user 
+
+$(document).on('click','.unfollow',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.follow.cancel') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+        //End Delete follow user
+</script>
 
   @endsection

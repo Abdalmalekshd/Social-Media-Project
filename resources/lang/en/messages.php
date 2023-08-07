@@ -22,7 +22,6 @@ return [
     'fllw'      =>'Follow',
     'like'      =>'Like',
     'comment'   =>'comment',
-    'retweet'   =>'Retweet',
     'sugtofllw' =>'Suggested To Follow',
     'mre'       =>'More',
     
@@ -50,7 +49,7 @@ return [
 //End single Post Page
 
     //Start AboutUs Page
-'aboutus'=>'This site is a social media site similar to (Facebook , Twitter , Instagram) the user can publish posts , like , comment and also can retweet any post and can follow or report a specific post or user or block other users
+'aboutus'=>'This site is a social media site similar to (Facebook , Twitter , Instagram) the user can publish posts , like , comment   and can follow or report a specific post or user or block other users
 , As for the admin , he can manage the site by (preventing a user from entering the site, deleting a post , preventing a user from posting or commenting for a specified period , viewing the sites statistics).',
     //End AboutUs Page
 

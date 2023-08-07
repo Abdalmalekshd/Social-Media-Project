@@ -197,8 +197,8 @@ return redirect()->route('user.home');
 
 
 
-        public function bookmark($id){
-            $bookmark_post=Post::find($id);
+        public function bookmark(Request $req){
+            $bookmark_post=Post::find($req->id);
 
             if(!$bookmark_post)
             return redirect()->route('user.home')->with(['error'=>'This Post Does Not Exist']);
@@ -208,33 +208,44 @@ return redirect()->route('user.home');
             'post_id'=>$bookmark_post->id
             ]);
 
-        return redirect()->route('user.home');
+            return response()->json([
+                "status" => true,
+                'msg' => 'Post Bookmarked Success'
+            ]);
 
         }
         
-        public function DeletebookmarkedPosts($id){
-        $post=BookmarkPost::where('user_id',auth()->id())->where('post_id',$id)->first();
+        public function DeletebookmarkedPosts(Request $req){
+        $post=BookmarkPost::where('user_id',auth()->id())->where('post_id',$req->id)->first();
         if(!$post)
         return redirect()->route('user.home')->with(['error'=>'This Post Does Not Exist']);
 
         $post->delete();
-        Alert::Success('Success', 'Post Has Been Deleted From Saved Posts Successfully');
-        return redirect()->route('user.home');
-
+        
+        return response()->json([
+            "status" => true,
+            'msg' => 'Delete Bookmarked Post Success'
+        ]);
         }
 
 
-        public function like($id){
-            auth()->user()->like()->attach($id);
+        public function like(Request $req){
+            auth()->user()->like()->attach($req->id);
 
-        return redirect()->route('user.home');
+            return response()->json([
+                "status" => true,
+                'msg' => 'Like Success'
+            ]);
 
         }
 
-        public function unlike($id){
-            auth()->user()->like()->detach($id);
+        public function unlike(Request $req){
+            auth()->user()->like()->detach($req->id);
 
-        return redirect()->route('user.home');
+            return response()->json([
+                "status" => true,
+                'msg' => 'Reomve Like '
+            ]);
 
         }
 

@@ -78,8 +78,8 @@ $Nosidebar='';
 
             
 
-                            <a class="showpost" href="{{ route('show.single.post',$bookmark->post->id) }}">
-                                @foreach ($bookmark->post->images as $images)
+                    <a class="showpost" href="{{ route('show.single.post',$bookmark->post->id) }}">
+                @foreach ($bookmark->post->images as $images)
                                     
         <div class="post-img-author-description"><img src="{{ url('Images/posts/' . $images->photo)}}" class="img-thumbnail" alt=""> 
             @endforeach
@@ -88,12 +88,12 @@ $Nosidebar='';
             <p>{{ $bookmark->post->content }}</p></div>
         <div class="reactian1">
             @if( \App\Models\Like::where('post_id',$bookmark->post->id)->Where('user_id',auth()->id())->first())
-        <a href="{{ route('delete.like.post',$bookmark->post->id) }}" title="unlike"><i class="fa fa-heart" style="color: red"></i></a><span>{{ \App\Models\Like::where('post_id',$bookmark->post->id)->count() }} {{ __('messages.like') }}</span>
-        
-        @else
-        <a href="{{ route('like.post',$bookmark->post->id) }}" title="like"><i class="fa fa-heart-o"></i></a><span>{{ \App\Models\Like::where('post_id',$bookmark->post->id)->count() }} {{ __('messages.like') }}</span>
-        
-        @endif
+            <button post_id='{{ $bookmark->post->id }}'  class="unlikepost" title="unlike"><i class="fa fa-heart" style="color: red"></i></button> <span> {{ $bookmark->like_count }} {{ __('messages.like') }}</span>
+            
+            @else
+            <button post_id='{{ $bookmark->post->id }}' class="likepost"   title="like"><i class="fa fa-heart-o"></i></button> <span>{{ $bookmark->like_count }} {{ __('messages.like') }}</span>
+            
+            @endif
         
         
         <a href=""><i class="fa fa-comment-o"></i></a><span>{{ \App\Models\Comment::where('post_id',$bookmark->post->id)->count() }} {{ __('messages.comment') }}</span>
@@ -101,9 +101,9 @@ $Nosidebar='';
 
             
             @if(\App\Models\BookmarkPost::where('post_id',$bookmark->post->id)->where('user_id',Auth::user()->id)->first())
-        <a href="{{ route('delete.bookmarked.post',$bookmark->post->id) }}"><i class="fa fa-bookmark"></i></a>
+        <button post_id='{{ $bookmark->post->id }}' class="dltbookmarkpost" ><i class="fa fa-bookmark"></i></button>
         @else
-        <a href="{{ route('bookmark.post',$bookmark->post->id) }}"><i class="fa fa-bookmark-o"></i></a>
+        <button post_id='{{ $bookmark->post->id }}' class="bookmarkpost" ><i class="fa fa-bookmark-o"></i></button>
 
         @endif
     </div>
@@ -125,5 +125,135 @@ $Nosidebar='';
 </div>
 
 
+<script>
+    //Start Like Post 
+    $(document).on('click','.likepost',function(e){
+        e.preventDefault();
+
+        let PostId=$(this).attr('post_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('like.post') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':PostId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End Like Post 
+
+
+    //Start UnLike Post 
+
+$(document).on('click','.unlikepost',function(e){
+        e.preventDefault();
+
+        let PostId=$(this).attr('post_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('delete.like.post') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':PostId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End UnLike Post 
+
+//Start Bookmark Post 
+$(document).on('click','.bookmarkpost',function(e){
+        e.preventDefault();
+
+        let PostId=$(this).attr('post_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('bookmark.post') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':PostId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End Bookmark Post 
+
+
+    //Start Delete Bookmarked Post 
+
+$(document).on('click','.dltbookmarkpost',function(e){
+        e.preventDefault();
+
+        let PostId=$(this).attr('post_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('delete.bookmarked.post') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':PostId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+        //End Delete Bookmarked Post 
+
+</script>
 
 @endsection

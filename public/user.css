@@ -339,13 +339,17 @@ margin-left: 500px;
   
 
 }
+.reactian button{
+background-color: transparent;
+border: none;
+}
 
 .reactian span{
     margin-right: 32px;
     color: #dbdbdb;
 }
 .reactian .fa-bookmark-o{
-    margin-left: 200px;
+    margin-left: 400px;
 }
 
 .reactian .fa-bookmark{
@@ -363,8 +367,14 @@ margin-left: 500px;
   display: inline;
 }
 
+.reactian1 button{
+  background-color: transparent;
+  border: none;
+  }
+  
+
 .reactian1 .fa-bookmark-o{
-  margin-left: 700px;
+  margin-left: 900px;
 }
 
 .reactian1 .fa-bookmark{

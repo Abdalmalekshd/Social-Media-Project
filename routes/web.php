@@ -103,15 +103,15 @@ Route::group(['prefix'=>'Post'],function(){
 
     Route::get('User/Bookmark','PostController@showbookmarkedPosts')->name('show.bookmarked.posts');
 
-    Route::get('bookmark/{id}','PostController@bookmark')->name('bookmark.post');//Ajax
+    Route::post('bookmark','PostController@bookmark')->name('bookmark.post');//Ajax
 
-    Route::get('User/Bookmark/dlt/{id}','PostController@DeletebookmarkedPosts')->name('delete.bookmarked.post');//Ajax
+    Route::post('User/Bookmark/dlt','PostController@DeletebookmarkedPosts')->name('delete.bookmarked.post');//Ajax
 
     
 
-    Route::get('like/{id}','PostController@like')->name('like.post');//Ajax
+    Route::post('like','PostController@like')->name('like.post');
 
-    Route::get('unlike/{id}','PostController@unlike')->name('delete.like.post');//Ajax
+    Route::post('unlike','PostController@unlike')->name('delete.like.post');
 
 
 

@@ -117,7 +117,8 @@ class PostController extends Controller
 
         File::delete($des);
 }
-
+    Image::where('photo', $image->photo)->delete();
+    
     }
     
 
@@ -125,7 +126,7 @@ foreach ($req->file('image') as $imagefile) {
                 
     $photo= $this->UploadImage('posts', $imagefile);
 
-    $images=$image->update(['photo'=>$photo]);
+    $images=$image->create(['photo'=>$photo,'post_id'=>$post->id]);
 
         
     }

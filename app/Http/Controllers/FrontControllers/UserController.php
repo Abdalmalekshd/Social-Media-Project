@@ -80,31 +80,43 @@ class UserController extends Controller
         ]);
     }
 
-    public function Block($id){
-        $block=Follower::where('user_id',Auth::user()->id)->where('followed_id',$id)->first();
+    public function Block(Request $req){
+        $block=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->first();
 
         if(!$block)
-        return redirect()->route('user.home')->with(['error'=>'This User Does Not Exist']);
-        
+        return response()->json([
+            "status" => false,
+            'msg' => 'User Does Not Exists'
+        ]);
+
         $block->update([
             'status' => 1,
         ]);
 
-        return redirect()->back();
+        return response()->json([
+            "status" => true,
+            'msg' => 'User Blocked Success'
+        ]);
 
     }
 
-    public function UnBlock($id){
-        $unblock=Follower::where('user_id',Auth::user()->id)->where('followed_id',$id)->where('status',1)->first();
+    public function UnBlock(Request $req){
+        $unblock=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->where('status',1)->first();
 
         if(!$unblock)
-        return redirect()->route('user.home')->with(['error'=>'This User Does Not Exist']);
-        
+        return response()->json([
+            "status" => false,
+            'msg' => 'User Does Not Exists'
+        ]);
+
         $unblock->update([
             'status' => 0,
         ]);
 
-        return redirect()->back();
+        return response()->json([
+            "status" => true,
+            'msg' => 'User Unblocked Success'
+        ]);
 
     }
 

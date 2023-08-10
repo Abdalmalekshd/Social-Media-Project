@@ -1,7 +1,9 @@
 @extends('Admin.layout.adminMaster')
 
 @section('content')
-  
+  <?php
+    $search='';
+  ?>
 <div class="col-md-9 col-lg-10 main">
 
     <h1 class="display-2 hidden-xs-down text-center">

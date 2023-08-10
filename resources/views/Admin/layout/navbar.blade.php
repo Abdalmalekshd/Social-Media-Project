@@ -20,10 +20,13 @@
             
         
             <li class="nav-item">
-
-            <form action="" method="">
-                <input type="search" name="search" style="border-radius:5px;" placeholder="Search Here...">
-            </form>
+                <?php 
+                if(!isset($search)){
+                ?>
+                <input type="search" id="search" name="search" style="border-radius:5px;" placeholder="Search Here...">
+            <?php 
+            }
+            ?>
         </li>
         <li class="nav-item"><a class="nav-link" href="{{ route('Dashboard') }}">Dashboard</a></li>
             

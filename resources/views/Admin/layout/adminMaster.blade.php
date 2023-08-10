@@ -95,6 +95,24 @@
       false
     );
 
+    $(document).ready(function() {
+            $("#search").keyup(function() {
+                var filter = $(this).val(),
+                    count = 0;
+                $(".table tr").each(function() {
+                    if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                        $(this).fadeOut();
+                    } else {
+                        $(this).show();
+                        count++;
+                    }
+                });
+
+                var numberItems = count;
+                $("#result-count").text("Number of Results = " + count);
+            });
+        });
+
                 $(document).ready(function() {
                 $("[data-toggle=offcanvas]").click(function() {
                     $(".row-offcanvas").toggleClass("active");

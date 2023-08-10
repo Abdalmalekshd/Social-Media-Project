@@ -137,9 +137,9 @@ Route::group(['prefix'=>'User'],function(){
     Route::post('cancelfollow','UserController@cancelfollow')->name('User.follow.cancel');
     
 
-    Route::get('Block/{id}','UserController@Block')->name('User.block');
+    Route::post('Block','UserController@Block')->name('User.block');
 
-    Route::get('UnBlock/{id}','UserController@UnBlock')->name('User.UnBlock');
+    Route::post('UnBlock','UserController@UnBlock')->name('User.UnBlock');
 
 
 

@@ -45,7 +45,7 @@ Route::group(['namespace'=>'App\Http\Controllers\AdminControllers','prefix'=>'ad
 ################### End Login & SignUp Routes  #######################
 
 ############################ Start Admin  Routes ###################################
-Route::group(['prefix'=>'SocialMedia/admin','namespace'=>'App\Http\Controllers\AdminControllers','middleware'=>'auth:admin'],function(){
+Route::group(['prefix'=>'SocialMedia/admin','namespace'=>'App\Http\Controllers\AdminControllers','middleware' => ['admin_auth']],function(){
 
     Route::get('Dashboard','DashboardController@Dashboard')->name('Dashboard');
 
@@ -65,6 +65,8 @@ Route::group(['prefix'=>'SocialMedia/admin','namespace'=>'App\Http\Controllers\A
 
     Route::get('all_posts','PostsController@allposts')->name('all.posts');
     Route::post('delete_post','PostsController@dltpost')->name('dlt.post');
+
+
 
     Route::get('logout','LoginController@adminlogout')->name('admin.logout');
 });

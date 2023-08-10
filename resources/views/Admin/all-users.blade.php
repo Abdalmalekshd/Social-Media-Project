@@ -136,6 +136,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
 <script>
   $(document).on('click','.deleteuser',function(e){
@@ -167,6 +168,27 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
       }
   });
 });
+
+
+
+    $(document).ready(function() {
+        $("#search").keyup(function() {
+            var filter = $(this).val(),
+                count = 0;
+            $(".table tr").each(function() {
+                if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                    $(this).fadeOut();
+                } else {
+                    $(this).show();
+                    count++;
+                }
+            });
+
+            var numberItems = count;
+            $("#result-count").text("Number of Results = " + count);
+        });
+    });
+
 </script>
 
   @endsection

@@ -47,7 +47,8 @@ $Nosidebar='';
         <div class="unfllw">
         <button user_id='{{$user->id}}' title="{{ __('messages.unfllw') }} "  class="btn btn-default unfollow"><li> {{ __('messages.unfllw') }}  </li>
         </div>
-        <a class="btn btn-danger editProfilebtn blkuser" href="{{ route('User.block',$user->id) }}">{{ __('messages.blck') }}</a>
+        <button class="btn btn-danger editProfilebtn blkuser blckbtn"  user_id='{{ $user->id }}'>{{ __('messages.blck') }}</button>
+        
         <a class="btn btn-danger editProfilebtn blkuser" href="{{ route('get.report',$user->id) }}">{{ __('messages.report') }}</a>
         
         @else
@@ -59,7 +60,7 @@ $Nosidebar='';
       </div>
         
         @else
-        <a class="btn btn-danger editProfilebtn blkuser" href="{{ route('User.UnBlock',$user->id) }}">{{ __('messages.unblck') }}</a>
+        <button class="btn btn-danger editProfilebtn blkuser unblckbtn" user_id='{{ $user->id }}'>{{ __('messages.unblck') }}</button>
         
         @endif
         
@@ -234,6 +235,72 @@ $(document).on('click','.unfollow',function(e){
 });
 
         //End Delete follow user
+
+//Start Block user 
+$(document).on('click','.blckbtn',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.block') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+    //End Block user 
+
+
+//Start Unblock user 
+
+$(document).on('click','.unblckbtn',function(e){
+        e.preventDefault();
+
+        let UserId=$(this).attr('user_id');
+        
+    $.ajax({
+        type: 'post',
+        url: "{{ route('User.UnBlock') }}",
+        data: {
+            '_token':"{{csrf_token()}}",
+            'id':UserId
+        },
+        success: function (data) {
+
+            if (data.status == true) {
+
+            }
+        },
+        
+        error: function (reject) {
+            var response = $.parseJSON(reject.responseText);
+            $.each(response.errors, function (key, val) {
+                $("#" + key + "_error").text(val[0]);
+            });
+        }
+    });
+});
+
+        //End Unblock user
+
+
 </script>
 
   @endsection

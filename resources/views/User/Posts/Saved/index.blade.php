@@ -17,14 +17,14 @@ $Nosidebar='';
                 
 
             <div class="user-img">
-                @if(!$bookmark->post->user->avatar)
+                <a href="{{ route('Show.User.Profile',$bookmark->post->user->id) }}" style="text-decoration:none;">  @if(!$bookmark->post->user->avatar)
             <img src="{{ url('img.png') }}" alt="">
                 @else
             <img src="{{ url('Images/Avatar/',$bookmark->post->user->avatar)}}" class="" alt=""> 
                 @endif
-                <span>{{ $bookmark->post->user->name }}</span>
+                <span style="font-size: 20px;color: white;">{{ $bookmark->post->user->name }}</span></a>
             
-                <div class="post-time" style="margin-top:-30px">
+                <div class="post-time" style="margin-top:-53px">
                     @if( \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $bookmark->post->created_at)->diffInDays(\Carbon\Carbon::now()) > 30)
                     {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $bookmark->post->created_at)->diffInMonths(\Carbon\Carbon::now()) }}Months
                     @else

@@ -10,14 +10,14 @@ $Nosidebar='';
     <div class="col-md-12">
         <div class="post">
         <div class="user-img">
-            @if(!$post->user->avatar)
+            <a href="{{ route('Show.User.Profile',$post->user->id) }}">@if(!$post->user->avatar)
         <img src="{{ url('img.png') }}" alt="">
             @else
         <img src="{{ url('Images/Avatar/', $post->user->avatar)}}" class="" alt=""> 
             @endif
             
-            <span>{{ $post->user->name }}</span> 
-            <div class="post-time" style="margin-top:-30px">
+            <span>{{ $post->user->name }}</span> </a>
+            <div class="post-time" style="margin-top:-53px">
                 @if( \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->diffInDays(\Carbon\Carbon::now()) > 30)
                 {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->diffInMonths(\Carbon\Carbon::now()) }}Months
                 @else
@@ -117,13 +117,13 @@ $Nosidebar='';
         @foreach ($comments as $comment)
         <div class="comment">
         <div class="commenter-info">
-            @if($comment->user->avatar)
+            <a href="{{ route('Show.User.Profile',$comment->user->id) }}" style="text-decoration:none;margin-left: -400px;color:white;">@if($comment->user->avatar)
             <img src="{{ url('Images/Avatar/', $comment->user->avatar)}}" class="rounded-circle" alt="">
             @else
             <img src="{{ url('img.png')}}" class="rounded-circle" alt="">
 
             @endif
-            {{ $comment->user->name }}</div>
+            {{ $comment->user->name }}</div></a>
         <span>{{ $comment->comment }}</span>
         {{--  --}}
         

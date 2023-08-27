@@ -30,14 +30,14 @@ Route::group(['namespace'=>'App\Http\Controllers\AdminControllers','prefix'=>'ad
     Route::post('admin_login','LoginController@adminsignup')->name('admin.login');
     
 
-    Route::get('admin_ForgetPassword','LoginController@adminforgetpass')->name('Admin.forgetpass');
+    Route::get('admin_ForgetPassword','LoginController@forgetpass')->name('Admin.forgetpass');
 
-    Route::post('admin_ForgetPass','LoginController@adminforgetpassword')->name('Admin.forgetpassword');
+    Route::post('admin_ForgetPass','LoginController@forgetpassword')->name('Admin.forgetpassword');
 
 
-    Route::get('admin_ResetPassword/{email}','LoginController@Resetpass')->name('Resetpass');
+    Route::get('admin_ResetPassword/{email}','LoginController@Resetpass')->name('admin.Resetpass');
 
-    Route::post('admin_setnewPassword','LoginController@setnewpass')->name('setnewpass');
+    Route::post('admin_setnewPassword','LoginController@setnewpass')->name('admin.setnewpass');
 
     });
     

@@ -13,3 +13,7 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+database/migrations/2023_08_18_999999_add_dark_mode_to_users.php
+database/migrations/2023_08_18_999999_add_avatar_to_users.php
+database/migrations/2023_08_18_999999_add_active_status_to_users.php

@@ -71,7 +71,7 @@
           <tbody>
             @foreach ($all_posts as $post)
 
-            <tr>
+            <tr class="postrow{{ $post->id }}">
               <td>
                 {{ $post->content }}
             </td>
@@ -161,7 +161,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
 
               $('#success_msg').show();
           }
-          $('.postdel'+data.id).remove();
+          $('.postrow'+data.id).remove();
       },
       
       error: function (reject) {

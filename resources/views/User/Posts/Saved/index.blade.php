@@ -20,7 +20,7 @@ $Nosidebar='';
                 <a href="{{ route('Show.User.Profile',$bookmark->post->user->id) }}" style="text-decoration:none;">  @if(!$bookmark->post->user->avatar)
             <img src="{{ url('img.png') }}" alt="">
                 @else
-            <img src="{{ url('Images/Avatar/',$bookmark->post->user->avatar)}}" class="" alt=""> 
+            <img src="{{ url('storage/users-avatar/',$bookmark->post->user->avatar)}}" class="" alt=""> 
                 @endif
                 <span style="font-size: 20px;color: white;">{{ $bookmark->post->user->name }}</span></a>
             

@@ -13,7 +13,7 @@ $Nosidebar='';
             <a href="{{ route('Show.User.Profile',$post->user->id) }}">@if(!$post->user->avatar)
         <img src="{{ url('img.png') }}" alt="">
             @else
-        <img src="{{ url('Images/Avatar/', $post->user->avatar)}}" class="" alt=""> 
+        <img src="{{ url('storage/users-avatar/', $post->user->avatar)}}" class="" alt=""> 
             @endif
             
             <span>{{ $post->user->name }}</span> </a>

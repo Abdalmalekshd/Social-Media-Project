@@ -15,7 +15,7 @@
                 @if(!$user->user->avatar)
             <img src="{{ url('img.png') }}" alt="">
                 @else
-            <img src="{{ url('Images/Avatar/',$user->user->avatar)}}" class="" alt=""> 
+            <img src="{{ url('Images/avatar/',$user->user->avatar)}}" class="" alt=""> 
                 @endif
                 
                 <span>{{ $user->user->name }} </span> 

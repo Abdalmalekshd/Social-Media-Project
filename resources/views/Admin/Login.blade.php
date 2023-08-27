@@ -45,7 +45,7 @@ $noNavbar = '';
         
         
 
-        <a  href="{{ route('forgetpass') }}">Forget password?</a>
+        <a  href="{{ route('Admin.forgetpass') }}">Forget password?</a>
 
         </form>
     </div>

@@ -204,11 +204,19 @@ return redirect()->route('user.home');
             if(!$bookmark_post)
             return redirect()->route('user.home')->with(['error'=>'This Post Does Not Exist']);
 
-            BookmarkPost::create([
-            'user_id'=>Auth::user()->id,
-            'post_id'=>$bookmark_post->id
-            ]);
-
+            if(! BookmarkPost::where('post_id',$bookmark_post->id)->where('user_id',Auth::user()->id)->first()){
+                BookmarkPost::create([
+                'user_id'=>Auth::user()->id,
+                'post_id'=>$bookmark_post->id
+                ]);
+            }else
+            {
+                return response()->json([
+                    "status" => false,
+                    'msg' => 'You Already Saved This Post'
+                ]);
+            }
+            
             return response()->json([
                 "status" => true,
                 'msg' => 'Post Bookmarked Success'

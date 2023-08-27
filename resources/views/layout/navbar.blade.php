@@ -9,7 +9,7 @@
             
         <img src="{{ url('img.png') }}" alt="">
             @else
-        <img src="{{  url('Images/Avatar/',$current_user->avatar) }}" alt=""> 
+        <img src="{{  url('Images/avatar/',$current_user->avatar) }}" alt=""> 
         @endif
         <span class="name">{{ \App\Models\User::where('id',Auth::user()->id)->first()->name }}
         </span>

@@ -75,7 +75,7 @@
             <tbody>
                 @foreach ($all_users as $user)
 
-                <tr>
+                <tr class="userRow{{ $user->id }}">
                 <td>
                 @if (!$user->avatar)
                 <img src="{{ url('img.png') }}" alt="{{ $user->avatar }}" class="rounded-circle" style="width:50px;height:50px">
@@ -157,7 +157,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
 
               $('#success_msg').show();
           }
-          $('.userdel'+data.id).remove();
+          $('.userRow'+data.id).remove();
       },
       
       error: function (reject) {

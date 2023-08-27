@@ -25,8 +25,8 @@
             <div class="rotate">
               <i class="fa fa-user fa-5x"></i>
             </div>
-            <h6 class="text-uppercase">Total Users</h6>
-            <h1 class="display-1">{{ $users }}</h1>
+            <h6 class="text-uppercase text-center">Total Users</h6>
+            <h1 class="display-1 text-center"><a href="{{ route('all.users') }}" style="color: white;">{{ $users }}</a></h1>
           </div>
         </div>
       </div>
@@ -36,8 +36,8 @@
             <div class="rotate">
               <i class="fa fa-twitter fa-4x"></i>
             </div>
-            <h6 class="text-uppercase">Total Posts</h6>
-            <h1 class="display-1">{{ $posts }}</h1>
+            <h6 class="text-uppercase text-center">Total Posts</h6>
+            <h1 class="display-1 text-center"><a href="{{ route('all.posts') }}" style="color: white;" >{{ $posts }}</a></h1>
           </div>
         </div>
       </div>
@@ -47,8 +47,8 @@
             <div class="rotate">
               <i class="fa fa-comments fa-5x"></i>
             </div>
-            <h6 class="text-uppercase">Total Comments</h6>
-            <h1 class="display-1">{{ $comments }}</h1>
+            <h6 class="text-uppercase text-center">Total Comments</h6>
+            <h1 class="display-1 text-center"> <a href="{{ route('all.comments') }}" style="color: white">{{ $comments }}</a></h1>
           </div>
         </div>
       </div>
@@ -58,8 +58,8 @@
             <div class="rotate">
               <i class="fa fa-share fa-5x"></i>
             </div>
-            <h6 class="text-uppercase">Total Reports</h6>
-            <h1 class="display-1">{{ $reports }}</h1>
+            <h6 class="text-uppercase text-center">Total Reports</h6>
+            <h1 class="display-1 text-center"> <a href="{{ route('all.reports') }}" style="color: white">{{ $reports }}</a></h1>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@
             <tbody>
               @foreach ($all_users as $user)
 
-              <tr>
+              <tr class="userrow{{ $user->id }}">
                 <td>
                 @if ($user->avatar)
                 <img src="{{ url('Images/Avatar/',$user->avatar) }}" alt="" class="rounded-circle" style="width:50px;height:50px">
@@ -156,7 +156,8 @@
           <tbody>
             @foreach ($all_posts as $post)
 
-            <tr>
+            <tr class="postrow{{ $post->id }}">
+
               <td>
                 {{ $post->content }}
             </td>
@@ -210,7 +211,8 @@
           <tbody>
             @foreach ($all_comments as $comment)
 
-            <tr>
+            <tr class="commentrow{{ $comment->id }}">
+
               <td class="text-center">
                 {{ $comment->comment }}
             </td>
@@ -256,7 +258,8 @@
           <tbody>
             @foreach ($all_reports as $report)
 
-            <tr>
+            <tr class="reportrow{{ $report->id }}">
+
               <td class="text-center">
                 {{ $report->reason }}
             </td>
@@ -385,7 +388,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
 
               $('#delpost_success_msg').show();
           }
-          $('.postdel'+data.id).remove();
+          $('.postrow'+data.id).remove();
       },
       
       error: function (reject) {
@@ -416,7 +419,7 @@ $(document).on('click','.deleteuser',function(e){
 
               $('#success_msg').show();
           }
-          $('.userdel'+data.id).remove();
+          $('.userrow'+data.id).remove();
       },
       
       error: function (reject) {
@@ -451,7 +454,7 @@ $(document).on('click','.deletecomment',function(e){
 
               $('#commentdel_success_msg').show();
           }
-          $('.commentdel'+data.id).remove();
+          $('.commentrow'+data.id).remove();
       },
       
       error: function (reject) {
@@ -483,7 +486,7 @@ $(document).on('click','.deletereport',function(e){
 
               $('#report_success_msg').show();
           }
-          $('.reportdel'+data.id).remove();
+          $('.reportrow'+data.id).remove();
       },
       
       error: function (reject) {

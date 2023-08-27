@@ -13,7 +13,7 @@ $Nosidebar='';
       <div class="uh-left">
         <div class="uh-image">
             @if ($user->avatar)
-            <img class="profile-img" src="{{  url('Images/Avatar/', $user->avatar) }}" alt="">
+            <img class="profile-img" src="{{  url('Images/avatar/', $user->avatar) }}" alt="">
                                     
                 @else
                     

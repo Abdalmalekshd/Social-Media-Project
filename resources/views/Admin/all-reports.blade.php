@@ -78,7 +78,7 @@
           <tbody>
             @foreach ($all_reports as $report)
 
-            <tr>
+            <tr class="reportrow{{ $report->id }}">
               <td class="text-center">
                 {{ $report->reason }}
             </td>
@@ -173,7 +173,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
 
               $('#success_msg').show();
           }
-          $('.reportdel'+data.id).remove();
+          $('.reportrow'+data.id).remove();
       },
       
       error: function (reject) {

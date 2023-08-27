@@ -23,7 +23,7 @@ $Nosidebar='';
 <div class="edit-profile-page">
     <div class="img">
             @if ($user->avatar)
-            <img class="edit-profile-img"  src="{{ url('Images/Avatar/', $user->avatar)}}" alt="">
+            <img class="edit-profile-img"  src="{{ url('Images/avatar/', $user->avatar)}}" alt="">
             
             @error('avatar')
             <div class="alert alert-danger">{{ $message }}</div>

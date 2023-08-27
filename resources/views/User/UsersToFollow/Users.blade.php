@@ -20,7 +20,7 @@ $Nosidebar='';
     <a href="{{ route('Show.User.Profile',$user->id) }}" style="text-decoration: none;">  
     <img src="{{ url('img.png') }}" alt="">
         @else
-        <img src="{{  url('Images/Avatar/', $user->avatar) }}" alt=""> 
+        <img src="{{  url('Images/avatar/', $user->avatar) }}" alt=""> 
         @endif 
     </a>
 
@@ -56,7 +56,7 @@ $Nosidebar='';
             
         <img src="{{ url('img.png') }}" alt="">
             @else
-            <img src="{{  url('Images/Avatar/', $users->avatar) }}" alt=""> 
+            <img src="{{  url('Images/avatar/', $users->avatar) }}" alt=""> 
             @endif 
             <label for="">
             {{ $users->name }}

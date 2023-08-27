@@ -69,7 +69,7 @@
           <tbody>
             @foreach ($all_comments as $comment)
 
-            <tr>
+            <tr class="commentrow{{ $comment->id }}">
               <td class="text-center">
                 {{ $comment->comment }}
             </td>
@@ -149,7 +149,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
 
               $('#success_msg').show();
           }
-          $('.commentdel'+data.id).remove();
+          $('.commentrow'+data.id).remove();
       },
       
       error: function (reject) {

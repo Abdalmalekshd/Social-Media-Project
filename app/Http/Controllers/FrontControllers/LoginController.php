@@ -51,7 +51,7 @@ return redirect()->back()->withInput($req->only('email'));
                         'gender'=>$req->gender,
                         'phone'=>$req->phone,
                         'password'=>bcrypt($req->password),
-                        'lives_in'=>$req->lives_in,
+                        
                         'country_id'=>$req->country,
 
                     ]);

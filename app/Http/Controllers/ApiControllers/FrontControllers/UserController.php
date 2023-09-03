@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ApiControllers\FrontControllers;
 
+use App\Http\Controllers\ApiControllers\ResponseController;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Follower;
@@ -14,16 +15,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class UserController extends Controller
+class UserController extends ResponseController
 {
     public function UserProfile($id){
         $data=[];
         $data['user']=User::find($id);
         if(!$data['user'])
-        return redirect()->route('user.home');
+        return $this->sendError('This User Does Not Exists');
+
 
         $data['post']=Post::with('images','user')->whereHas('images',function($img){
-            $img->select('photo','video');
+            $img->select('photo');
         })->withCount('comments')->withCount('like')->whereHas('user')->where('user_id',$data['user']->id)->get();
         
 
@@ -45,7 +47,8 @@ class UserController extends Controller
 
     $data['countposts']=Post::where('user_id',$id)->count();
 
-        return view('User.UsersToFollow.UserProfile',$data);
+    return $this->sendResponse($data,'Others Users Profile Page');
+
     }
 
     public function follow(Request $req){
@@ -53,50 +56,51 @@ class UserController extends Controller
         $user=User::find($req->id);
 
         if(!$user)
-        return redirect()->route('user.home')->with(['error'=>'This User Does Not Exist']);
-
+        return $this->sendError('This User Does Not Exists');
+        if(!Follower::where('user_id',auth()->id())->where('followed_id',$req->id)->first()){
         Follower::create([
         'user_id'=>Auth::user()->id,
         'followed_id'=>$user->id
         ]);
 
-        return response()->json([
-            "status" => true,
-            'msg' => 'User followed Success'
-        ]);
+        return $this->sendResponse($user,'You Started Following ' .User::where('id',$req->id)->first()->name);
+    }
+    else{
+        return $this->sendError('You Already Following '.User::where('id',$req->id)->first()->name);
+
+    }
     }
     
     public function cancelfollow(Request $req){
         $follower=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->first();
 
         if(!$follower)
-        return redirect()->route('user.home')->with(['error'=>'You Dont Follow This User']);
+        return $this->sendError('You Dont Follow This User');
 
         $follower->delete();
 
-        return response()->json([
-            "status" => true,
-            'msg' => 'User Unfollowed Success'
-        ]);
+        return $this->sendResponse(User::where('id',$req->id)->first(),'You Unfollowed '.User::where('id',$req->id)->first()->name);
+
     }
 
     public function Block(Request $req){
         $block=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->first();
 
         if(!$block)
-        return response()->json([
-            "status" => false,
-            'msg' => 'User Does Not Exists'
-        ]);
+        return $this->sendError('User Does Not Exists');
+
+        if(Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->where('status',0)->first()){
 
         $block->update([
             'status' => 1,
         ]);
+        return $this->sendResponse(User::where('id',$req->id)->first(),'You Blocked '.User::where('id',$req->id)->first()->name);
 
-        return response()->json([
-            "status" => true,
-            'msg' => 'User Blocked Success'
-        ]);
+    }else{
+        return $this->sendError('You Already Blocked '.User::where('id',$req->id)->first()->name);
+
+    }
+
 
     }
 
@@ -104,86 +108,82 @@ class UserController extends Controller
         $unblock=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->where('status',1)->first();
 
         if(!$unblock)
-        return response()->json([
-            "status" => false,
-            'msg' => 'User Does Not Exists'
-        ]);
-
+        return $this->sendError('You Did Not Block '. User::where('id',$req->id)->first()->name);
+        
+    
         $unblock->update([
             'status' => 0,
         ]);
 
-        return response()->json([
-            "status" => true,
-            'msg' => 'User Unblocked Success'
-        ]);
-
+        return $this->sendResponse(User::where('id',$req->id)->first(),'You UnBlocked '.User::where('id',$req->id)->first()->name);
+        
+    
     }
 
 
-    public function getreport($id){
-        $data=[]; 
-$data['post']=Post::find($id);
-$data['user']=User::find($id);
-$data['comment']=Comment::find($id);
-
-
-if(!$data)
-return redirect()->route('user.home')->with(['error'=>'This ID Does Not Exist']);
-
-
-
-return view('User.Reports.create',$data);
-
-}
 
 public function report(Request $req){
 
     
 try{
     DB::beginTransaction();
+    $data=[];
     $id='';
-if($req->postId == null && $req->commentId == null)
-{
-$id=$req->userId;
-
-Report::create([
-'user'=>$id,
-'reason'=>$req->reason,
-'user_id'=>auth()->id(),
-]);
-
-}elseif($req->userId == null && $req->commentId == null){
-$id=$req->postId;
-
-
-Report::create([
-'post_id'=>$id,
-'reason'=>$req->reason,
-'user_id'=>auth()->id(),
-]);
+    if($req->postId == null && $req->commentId == null)
+    {
+    $id=$req->userId;
+        if(User::where('id',$req->userId)->first()){
+    $data['user']=Report::create([
+    'user'=>$id,
+    'reason'=>$req->reason,
+    'user_id'=>auth()->id(),
+    ]);
 
 }else{
-$id=$req->commentId;
+    return $this->sendError('This User Account You Reported Does Not Exist Any More');
 
-Report::create([
-'comment_id'=>$id,
-'reason'=>$req->reason,
-'user_id'=>auth()->id(),
-]);
+}
+    }elseif($req->userId == null && $req->commentId == null){
+    $id=$req->postId;
+
+    if(Post::where('id',$req->postId)->first()){
+
+    $data['post']=Report::create([
+    'post_id'=>$id,
+    'reason'=>$req->reason,
+    'user_id'=>auth()->id(),
+    ]);
+}else{
+    return $this->sendError('This Post You Reported Has Been Deleted');
+
+}
+    }else{
+    $id=$req->commentId;
+    
+    if(Comment::where('id',$req->commentId)->first()){
+
+    $data['comment']=Report::create([
+    'comment_id'=>$id,
+    'reason'=>$req->reason,
+    'user_id'=>auth()->id(),
+    ]);
+}else{
+    return $this->sendError('This Comment You Reported Has Been Deleted');
 
 }
 
-Alert::Success('Success', 'Thank You For Helping Us Make Our Community Safer ');
-DB::commit();
+}
 
-return redirect()->route('user.home');
+    DB::commit();
+
+    return $this->sendResponse($data,'Thank you for your contribution to improving our community');
+
 
 
 }catch(\Exception $ex){
-DB::rollBack();
-Alert::error('Error Title', 'Error Message');
-return redirect()->route('user.home');
+    DB::rollBack();
+    return $this->sendError('There Was An Error Please Try Again Later');
+
 }
 
 }
@@ -195,20 +195,26 @@ public function users(){
         $q->where('user_id','=',auth()->id());
     })->where('id','<>',auth()->id())->inRandomOrder()->paginate(10);
 
-    $data['user']='';
+    return $this->sendResponse($data,'Users To Follow Page');
 
-return view('User.UsersToFollow.Users',$data);
 }
 
 
 public function search(Request $req){
     $data['user'] = User::where(DB::raw('concat(name," ",phone)') , 'LIKE' , '%' . $req->search . '%')->get();
     
-    
-    $data['suggested_users']='';
-    return view('User.UsersToFollow.Users',$data);
+
+    return $this->sendResponse($data,'We Found '. User::where(DB::raw('concat(name," ",phone)') , 'LIKE' , '%' . $req->search . '%')->count() . ' Result For You');
 
 
 }
+
+
+public function userlogout(){
+    auth('web')->logout();
+    
+    return $this->sendResponse('','You Just Logged Out Please Login To Get To Your Account');
+
+    }
 
 }

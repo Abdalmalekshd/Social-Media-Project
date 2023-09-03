@@ -9,6 +9,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\BookmarkPost;
 use App\Models\Comment;
 use App\Models\Image;
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\Report;
 use App\Models\User;
@@ -42,7 +43,7 @@ class PostController extends ResponseController
     
 
 
-    public function store(PostRequest $req){
+    public function store(Request $req){
         
         try{
             DB::beginTransaction();
@@ -57,26 +58,20 @@ class PostController extends ResponseController
             $image= $this->UploadImage('posts', $imagefile);
 
             $image=Image::create(['photo'=>$image,'post_id'=>$post->id]);
-
                 
             }
             
             
-
-            
-            
-            Alert::Success('Success', 'Post Added Successfully');
             DB::commit();
 
             
-        return redirect()->route('user.home');
-            
+    return $this->sendResponse($post,'Post Added Successfully');
+        
             
         }catch(\Exception $ex){
             DB::rollBack();
-            Alert::error('Error Title', 'Error Message');
-            return redirect()->route('user.home');
-
+    return $this->sendError('Please Check Your Data ');
+            
         }
 
         }
@@ -102,7 +97,7 @@ class PostController extends ResponseController
             $post->update(['content'=>$request->content]);
 
             //update Photo Code
-    if ($request->photo) {
+    if ($request->hasFile('image')) {
         foreach($post->images as $image){
                 
             $des = 'Images/posts/' . $image->photo;
@@ -115,14 +110,14 @@ class PostController extends ResponseController
     }
     
 
-foreach ($request->photo as $imagefile) {     
+    foreach ($request->file('image') as $imagefile) {     
                 
-    $photo= $this->UploadImage('posts', $imagefile);
+        $image= $this->UploadImage('posts', $imagefile);
 
-    $images=$image->create(['photo'=>$photo,'post_id'=>$post->id]);
+        $image=Image::create(['photo'=>$image,'post_id'=>$post->id]);
+            
+        }
 
-        
-    }
 }
 
 
@@ -220,74 +215,62 @@ return $this->sendResponse($post,'Post succefully Updated');
 
 
         public function like(Request $req){
-            auth()->user()->like()->attach($req->id);
-
-            return response()->json([
-                "status" => true,
-                'msg' => 'Like Success'
-            ]);
-
-        }
-
-        public function unlike(Request $req){
-            auth()->user()->like()->detach($req->id);
-
-            return response()->json([
-                "status" => true,
-                'msg' => 'Reomve Like '
-            ]);
-
-        }
-
-
-        public function retweet($id){
             
-            auth()->user()->retweet()->attach($id);
+            if(!Post::where('id',$req->id)->first())
+            return $this->sendError('This Post Does Not Exists');
+            if(!Like::where('post_id',$req->id)->where('user_id',auth()->user()->id)->first())
+            {
+                $like=auth()->user()->like()->attach($req->id);
 
-        return redirect()->route('user.home');
+            }else{
+                auth()->user()->like()->detach($req->id);
+
+                return $this->sendResponse('','User '. Auth::user()->name .' UnLiked Post Successfully');
+
+            }
+
+
+            return $this->sendResponse('','User '. Auth::user()->name .' Liked Post Successfully');
+
 
         }
 
-        public function unretweet($id){
-            auth()->user()->retweet()->detach($id);
+        
 
-        return redirect()->route('user.home');
-
-        }
-
-        public function comment(CommentRequest $req){
+        public function comment(Request $req,$id){
             
-            try{
-                if($req->comment1 == null){
+            
+            if(Post::where('id',$id)->first()){
+                
                 $comment=Comment::create([
                     'comment'=>$req->comment,
-                    'post_id'=>$req->post_id,
+                    'post_id'=>$id,
                     'user_id'=>auth()->id()
                 ]);
-            }else{
-                $comment=Comment::create([
-                    'parent_id'=>$req->parent_id,
-                    'comment'=>$req->comment1,
-                    'post_id'=>$req->post_id,
-                    'user_id'=>auth()->id()
-                ]);
-            }
-                
+            
+            
+            return $this->sendResponse($comment,'User '. Auth::user()->name .' Commented In ' . Post::find($id)->user->name. ' Post');
+        }else{
+            return $this->sendError('This Post Does Not Exists');
+        }
 
-            }catch(\Exception $ex){
+            
 
-            }
+            
         }
 
         public function destroycomment($id){
-            $comment=Comment::find($id);
+        $comment=Comment::where('id',$id)->first();
+            
+            
 
             if(!$comment)
-            return redirect()->route('user.home')->with(['error'=>'This Post Does Not Exist']);
+            return $this->sendError('This Post Does Not Exists');
 
             $comment->delete();
 
-            return redirect()->back();
+            return $this->sendResponse($comment,'Comment In ' . Post::find($comment->post_id)->user->name. ' Post Deleted Successfully');
+            
         }
 
         

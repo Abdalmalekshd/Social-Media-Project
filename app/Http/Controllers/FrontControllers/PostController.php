@@ -259,38 +259,21 @@ return redirect()->route('user.home');
         }
 
 
-        public function retweet($id){
-            
-            auth()->user()->retweet()->attach($id);
+        
 
-        return redirect()->route('user.home');
-
-        }
-
-        public function unretweet($id){
-            auth()->user()->retweet()->detach($id);
-
-        return redirect()->route('user.home');
-
-        }
 
         public function comment(CommentRequest $req){
             
             try{
-                if($req->comment1 == null){
+                
                 $comment=Comment::create([
                     'comment'=>$req->comment,
                     'post_id'=>$req->post_id,
                     'user_id'=>auth()->id()
                 ]);
-            }else{
-                $comment=Comment::create([
-                    'parent_id'=>$req->parent_id,
-                    'comment'=>$req->comment1,
-                    'post_id'=>$req->post_id,
-                    'user_id'=>auth()->id()
-                ]);
-            }
+            
+                
+            
                 
 
             }catch(\Exception $ex){

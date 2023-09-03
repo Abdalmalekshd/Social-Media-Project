@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ApiControllers\FrontControllers;
 
+use App\Http\Controllers\ApiControllers\ResponseController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignInRequest;
@@ -14,34 +15,30 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-class SignUpController extends Controller
+class SignUpController extends ResponseController
 {
 
-            public function Signin(SignInRequest $req){
-                try{
+            public function Signup(Request $req){
+                
+                    $input=$req->all();
+                    $input['password']=bcrypt($input['password']);
+                    $user=User::create($input);
+                    $success['token']=$user->createToken('')->accessToken;
+                    $success['name']=$user->name;
+                    $success['gender']=$user->gender;
+                    $success['phone']=$user->phone;
+                    $success['email']=$user->email;
+                    $success['country_id']=$user->country;
 
-                    $user=User::create([
-                        'name'=>$req->name,
-                        'email'=>$req->email,
-                        'gender'=>$req->gender,
-                        'phone'=>$req->phone,
-                        'password'=>bcrypt($req->password),
-                        'lives_in'=>$req->lives_in,
-                        'country_id'=>$req->country,
+                    return $this->sendResponse($success,'User Created Successfully');
+                    
 
-                    ]);
-
-                    return redirect()->route('user.home')->with(['success'=>'You Are Regestired']);
-
-                }catch(\Exception $ex){
-
-                }
+                    
+                
                     }    
         
 
-                public function forgetpass(){
-            return view('User.ForgetPassword');
-                }
+                
 
                 public function forgetpassword(Request $req){
                     $data=[];

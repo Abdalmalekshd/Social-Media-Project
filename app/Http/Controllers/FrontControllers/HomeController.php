@@ -8,7 +8,7 @@ use App\Models\Post;
 use App\Models\Image;
 use App\Models\User;
 use Carbon\Carbon;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
@@ -35,9 +35,22 @@ class HomeController extends Controller
                 
             $data['current_user']=User::where('id',Auth::user()->id)->first();
 
+            
         return view('user.home',$data);
     }
 
+
+    public function markNotification(Request $request)
+    {
+        auth()->user()
+            ->unreadNotifications
+            ->when($request->input('id'), function ($query) use ($request) {
+                return $query->where('id', $request->input('id'));
+            })
+            ->markAsRead();
+
+        return response()->noContent();
+    }
 
     public function Aboutus(){
         

@@ -84,6 +84,11 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
     }
 
 
+    function NotifyToggle(){
+        const toggleMenu = document.querySelector('.notify');
+        toggleMenu.classList.toggle('active')
+    }
+
 //Post Options Menu
     function changeLanguage(language) {
                     var element = document.getElementById("url");
@@ -96,6 +101,34 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
                 }
 
                 
+    function sendMarkRequest(id = null) {
+        return $.ajax("{{ route('markNotification') }}", {
+            method: 'POST',
+            data: {
+                '_token':"{{csrf_token()}}",
+                id
+            }
+        });
+    }
+
+    $(function() {
+        $('.mark-as-read').click(function() {
+            let request = sendMarkRequest($(this).data('id'));
+
+            request.done(() => {
+                $(this).parents('div.alert').remove();
+            });
+        });
+
+        $('#mark-all').click(function() {
+            let request = sendMarkRequest();
+
+            request.done(() => {
+                $('div.alert').remove();
+            })
+        });
+    });
+
 
 //                 $("#img1").on({
 //     mouseenter: function () {

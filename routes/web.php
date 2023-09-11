@@ -60,7 +60,7 @@ Route::group(['middleware'=>'auth:web'],function(){
 
     Route::get('/','HomeController@home')->name('user.home');
 
-    
+    Route::post('/mark-as-read', 'HomeController@markNotification')->name('markNotification');
 ############################ Start Profile Routes ###################################
 Route::group(['prefix'=>'Profile'],function(){
     

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\FrontControllers;
 
+use App\Events\NewPost as EventsNewPost;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PostRequest;
 use App\Models\BookmarkPost;
 use App\Models\Comment;
+use App\Models\Follower;
 use App\Models\Image;
 use App\Models\Post;
 use App\Models\Report;
@@ -16,8 +18,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-
+use App\Notifications\NewPostNotify;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 class PostController extends Controller
@@ -40,6 +43,7 @@ class PostController extends Controller
 
     public function create(){
         
+
     return view('user.Posts.createpost');
     }
 
@@ -63,14 +67,19 @@ class PostController extends Controller
                 
             }
             
-            
+            $users=User::whereHas('follow',function($q){
+                $q->where('followed_id',auth()->id());
+            })->get();
 
-            
+
+            Notification::send($users,new NewPostNotify($post));
+
             
             Alert::Success('Success', 'Post Added Successfully');
             DB::commit();
 
             
+
         return redirect()->route('user.home');
             
             

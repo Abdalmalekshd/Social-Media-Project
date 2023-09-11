@@ -13,41 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('admin_login','App\Http\Controllers\ApiControllers\AdminControllers\LoginController@adminsignup')->name('admin.login');
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:adminapi')->namespace('App\Http\Controllers\ApiControllers\AdminControllers')->group(function () {
 
-    Route::get('/user', function (Request $request) {
+    Route::get('/Admin', function (Request $request) {
         return $request->user();
     });
 
 //User Routes
 
-Route::group(['namespace'=>'App\Http\Controllers\ApiControllers\AdminControllers'],function(){
 
 
 
-
-    Route::get('adminlogin','LoginController@adminLogin')->name('admin.get.login');
-
-    Route::post('admin_login','LoginController@adminsignup')->name('admin.login');
-    
-
-    Route::get('admin_ForgetPassword','LoginController@forgetpass')->name('Admin.forgetpass');
-
-    Route::post('admin_ForgetPass','LoginController@forgetpassword')->name('Admin.forgetpassword');
-
-
-    Route::get('admin_ResetPassword/{email}','LoginController@Resetpass')->name('admin.Resetpass');
-
-    Route::post('admin_setnewPassword','LoginController@setnewpass')->name('admin.setnewpass');
-
-    });
     
 
 ################### End Login & SignUp Routes  #######################
 
 ############################ Start Admin  Routes ###################################
-Route::group(['prefix'=>'SocialMedia/admin','namespace'=>'App\Http\Controllers\AdminControllers','middleware' => ['admin_auth']],function(){
 
     Route::get('Dashboard','DashboardController@Dashboard')->name('Dashboard');
 
@@ -68,14 +51,15 @@ Route::group(['prefix'=>'SocialMedia/admin','namespace'=>'App\Http\Controllers\A
     Route::get('all_posts','PostsController@allposts')->name('all.posts');
     Route::post('delete_post','PostsController@dltpost')->name('dlt.post');
 
+    Route::post('logout','LoginController@adminlogout')->name('logout');
 
 });
 ############################ End User Routes ###################################
 
-    Route::post('logout','App\Http\Controllers\ApiControllers\FrontControllers\UserController@userlogout')->name('logout');
+    
 
-// بقيان باليوزر (Chatify)
-});
+
+
 // Personal access client created successfully.
 // Client ID: 1
 // Client secret: 0BoBEH5n65SOfnZ3qu2SmAb4TvPD904XgZYH7rK3

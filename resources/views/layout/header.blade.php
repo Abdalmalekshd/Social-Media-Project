@@ -9,9 +9,30 @@
       <li><a href="{{ route('show.bookmarked.posts') }}" title="{{ __('messages.saved') }}"><i class="fa fa-bookmark-o"></i> {{ __('messages.saved') }}</a></li>
 
       <li class="social">
-        <a href="" class="Notifications" title=""><i class="fa fa-bell-o fa-lg"></i></a>
-        <span class='Notifications-count'>3+</span>
-      </li>
+        <a href="#" class="Notifications" onclick="NotifyToggle();"  title=""><i class="fa fa-bell-o fa-lg"></i></a>
+        <span class='Notifications-count'>{{ auth()->user()->unreadNotifications->count() }}</span>
+      
+      <div class="notify">
+        {{-- @if(Notification::) --}}
+        @forelse(auth()->user()->unreadNotifications as $notification)
+        <div class="alert" role="alert" style="color: black;background-color:rgb(150, 144, 144)" role="alert">
+          [{{ $notification->created_at }}] <br>   {{ $notification->data['post_creater'] }} Added New Post 
+          {{ $notification->data['post_content'] }} 
+
+          <a href="#" class="float-right mark-as-read" style="" data-id="{{ $notification->id }}">
+            Mark as read
+        </a>
+    </div>
+    @if($loop->last)
+    <a href="#" id="mark-all">
+        Mark all as read
+    </a>
+@endif
+@empty
+<div style="color: white">There are no new notifications</div>
+@endforelse
+</li>
+  </div>
         <li class="social profile" onclick="menuToggle();" >
           
           <a href="#">

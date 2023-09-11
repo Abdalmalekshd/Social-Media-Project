@@ -105,7 +105,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
         return $.ajax("{{ route('markNotification') }}", {
             method: 'POST',
             data: {
-                '_token':"{{csrf_token()}}",
+                '_token':"{{ csrf_token() }}",
                 id
             }
         });

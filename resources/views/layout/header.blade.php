@@ -13,11 +13,11 @@
         <span class='Notifications-count'>{{ auth()->user()->unreadNotifications->count() }}</span>
       
       <div class="notify">
-        {{-- @if(Notification::) --}}
+        
         @forelse(auth()->user()->unreadNotifications as $notification)
-        <div class="alert" role="alert" style="color: black;background-color:rgb(150, 144, 144)" role="alert">
-          [{{ $notification->created_at }}] <br>   {{ $notification->data['post_creater'] }} Added New Post 
-          {{ $notification->data['post_content'] }} 
+        <div class="alert" role="alert" style="color: black;background-color:rgb(107, 105, 105)" role="alert">
+          <a href="{{ route('show.single.post',$notification->data['post_id']) }}">[{{ $notification->created_at }}] <br>   {{ $notification->data['post_creater'] }} Added New Post 
+          {{ $notification->data['post_content'] }} </a>
 
           <a href="#" class="float-right mark-as-read" style="" data-id="{{ $notification->id }}">
             Mark as read

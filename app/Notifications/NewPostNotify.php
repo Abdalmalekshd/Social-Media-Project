@@ -56,8 +56,9 @@ class NewPostNotify extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
+            'post_id'      =>$this->post->id,
             'post_content' =>$this->post->content,
-            'post_creater'  =>$this->post->user->name
+            'post_creater' =>$this->post->user->name
 
         ];
     }

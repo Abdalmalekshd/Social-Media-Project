@@ -843,6 +843,21 @@ margin-top: 20px;
   color:#ff00ff;
 } 
 
+.editcommentbtn{
+  width: 200px;
+  position: absolute;
+  margin-left: 880px;
+  margin-top: -120px;
+}
+
+.editcommentbtn a{
+  text-decoration: none;
+}
+
+.editcommentbtn  .edit,.editcommentbtn .replay,.editcommentbtn  .dlt,.editcommentbtn .report{
+  width: 90px;
+}
+
 /* User Profile Page */
 
 :root {
@@ -1218,6 +1233,9 @@ width: 80px;
   .img-btns {
     font-size: .8em;
   }
+
+
+  
 }
 
 

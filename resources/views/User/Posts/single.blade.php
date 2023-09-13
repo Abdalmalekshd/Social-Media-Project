@@ -13,7 +13,7 @@ $Nosidebar='';
             <a href="{{ route('Show.User.Profile',$post->user->id) }}">@if(!$post->user->avatar)
         <img src="{{ url('img.png') }}" alt="">
             @else
-        <img src="{{ url('storage/users-avatar/', $post->user->avatar)}}" class="" alt=""> 
+        <img src="{{ url('Images/avatar/', $post->user->avatar)}}" class="" alt=""> 
             @endif
             
             <span>{{ $post->user->name }}</span> </a>
@@ -125,19 +125,38 @@ $Nosidebar='';
             @endif
             {{ $comment->user->name }}</div></a>
         <span>{{ $comment->comment }}</span>
-        {{--  --}}
         
+        {{-- @if(! $comment->parent_id == null)
+        <span>{{ $comment->comment }}</span>
+        @endif --}}
         <div class="editcommentbtn">
             @if($post->user_id == auth()->id() || $comment->user_id == auth()->id())
-        <a href="{{ route('dlt.comment',$comment->id) }}" class="text-danger">{{ __('messages.dlt') }}</a>
+        <a href="{{ route('user.dlt.comment',$comment->id) }}" class="fa fa-close text-danger dlt">{{ __('messages.dlt') }}</a>
         @endif
         @if($comment->user_id == auth()->id())
-        <a href="" class="text-success">{{ __('messages.edit') }}</a>
+        <a href="{{ route('edit.comment', $comment->id) }}"
+            class="fa-solid fa-user-pen
+            text-primary rounded-pill border border-0 edit">{{ __('messages.edit') }}</a>
+
+        <a id="open-comm1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#comment1"></a>
+
+
+        
 </div>
 
 @else
-<a href="{{ route('get.report',$comment->id) }}" class="text-danger">{{ __('messages.report') }}</a>
-{{-- <a href="" class="text-danger">Replay</a> --}}
+<div class="editcommentbtn">
+
+<a href="{{ route('get.report',$comment->id) }}" class="text-danger report">{{ __('messages.report') }}</a>
+<a href="" class="text-primary "></a>
+
+<a href="{{ route('get.replay.comment', $comment->id) }}"
+    class="fa-solid fa-user-pen
+    text-primary rounded-pill border border-0  replay">{{ __('messages.replay') }}</a>
+
+<a id="open-replay1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#replay1"></a>
+
+</div>
 
         @endif
         
@@ -155,16 +174,150 @@ $Nosidebar='';
 
     <input type="text" name="comment" class="comment-input" placeholder="{{ __('messages.putacomment') }}">
     
+
     <button class="btn btn-success" title="comment"><i class="fa fa-send"></i></button>
     <br>
     @error('comment')
     <div  class="alert alert-danger text-center">{{ $message }}</div>
-    @enderror    
+    @enderror
+    
+    
+    
+    @if (Session::has('success'))
+    <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
+@endif
 </form>
 </div>
 </div>
 
+{{-- Edit Comment Form --}}
+
+@if ($comm)
+<div class="modal
+                        fade border border-3 shadow-lg" id="comment1"
+    aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="hedar">
+                
+                <label class="ms-3 mt-3">
+                    <h3>Edit Your Comment</h3>
+                </label>
+                <hr width=100% color=#898585>
+            </div>
+
+
+
+            <div class="modal-body col-sm-12">
+                <form id="FormUpdate" method="POST" action="{{ route('update.comment') }}">
+                    @csrf
+
+                    <input type="hidden" name="id" value="{{ $comm->id }}" class="d-none" />
+                    @error('id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                    <div class="form-group">
+                        <label for="" class="control-label ps-3">{{ __('messages.edit') }}</label><br>
+                        <input type="text" value="{{ $comm->comment }}"
+                            class="form-control ms-1" name='comment' placeholder="Enter Your Comment">
+                            @error('comment')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                    </div>
+
+
+                    
+
+
+                    <div class="modal-footer col-sm-12">
+
+                        <button type="submit" style="width: 600px" class="btn btn-outline-danger float-end me-3 mt-2">
+                            Update</button>
+
+
+                        <a  href="{{ route('show.single.post',$comm->post->id) }}" class="btn btn-outline-primary float-end me-3 mt-3">Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endif
+
+{{-- Replay Form --}}
+@if ($comm)
+<div class="modal
+                        fade border border-3 shadow-lg" id="replay1"
+    aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="hedar">
+
+                <label class="ms-3 mt-3">
+                    <h3>Replay To {{ $comm->user->name }} Comment</h3>
+                </label>
+                <hr width=100% color=#898585>
+            </div>
+
+
+
+            <div class="modal-body col-sm-12">
+                <form  method="POST" action="{{ route('replay.comment') }}">
+                    @csrf
+
+                    <input type="hidden" name="parent_id" value="{{ $comm->id }}" class="d-none" />
+                    @error('parent_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+
+                            
+                    <input type="hidden" name="post_id" value="{{ $comm->post->id }}" class="d-none" />
+                    @error('post_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+
+                    <div class="form-group">
+                        <label for="" class="control-label ps-3">{{ __('messages.replay') }}</label><br>
+                        <input type="text" 
+                            class="form-control ms-1" name='replay' placeholder="Enter Your replay">
+                            @error('replay')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                    </div>
+
+
+                    
+
+
+                    <div class="modal-footer col-sm-12">
+
+                        <button type="submit" style="width: 600px" class="btn btn-outline-danger float-end me-3 mt-2">
+                            Replay</button>
+
+
+                        <a  href="{{ route('show.single.post',$comm->post->id) }}" class="btn btn-outline-primary float-end me-3 mt-3">Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endif
+
 <script>
+window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('open-comm1-btn').click()
+    });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('open-replay1-btn').click()
+    });
+
+
     //Start Like Post 
     $(document).on('click','.likepost',function(e){
         e.preventDefault();

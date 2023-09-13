@@ -17,6 +17,7 @@ return [
 
     //Home Page
     'report'        =>'ابلاغ',
+    'replay'        =>'رد',
     'edit'          =>'تعديل',
     'dlt'           =>'حذف',
     'unfllw'        =>'الغاء المتابعة',

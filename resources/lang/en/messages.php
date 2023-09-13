@@ -16,6 +16,7 @@ return [
     //Home Page
 
     'report'    =>'Report',
+    'replay'    =>'Replay',
     'edit'      =>'Edit',
     'dlt'       =>'Delete',
     'unfllw'    =>'Unfollow',

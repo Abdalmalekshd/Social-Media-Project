@@ -34,7 +34,7 @@ class PostController extends ResponseController
         if(!$data['post'])
         return $this->sendError('This Post Does Not Exists','');
         $postId=$data['post']->id;
-        $data['comments']=Comment::with('user')->Where('post_id',$data['post']->id)->get();
+        $data['comments']=Comment::with('user')->Where('post_id',$data['post']->id)->where('parent_id','=',null)->get();
         return $this->sendResponse($data,'Single Post Page');
 
     }

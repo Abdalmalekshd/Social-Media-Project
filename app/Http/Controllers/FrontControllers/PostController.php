@@ -35,7 +35,10 @@ class PostController extends Controller
         if(!$data['post'])
         return redirect()->route('user.home')->with(['error'=>'This Post Does Not Exist']);
         $postId=$data['post']->id;
-        $data['comments']=Comment::with('user')->Where('post_id',$data['post']->id)->get();
+        $data['comments']=Comment::with('user')->Where('post_id',$data['post']->id)->where('parent_id','=',null)->get();
+        $data['replaycomments']=Comment::with('user')->Where('post_id',$data['post']->id)->where('parent_id','!=',null)->get();
+        
+        $data['comm']=null;
         return view('user.Posts.single',$data);
 
     }
@@ -43,7 +46,6 @@ class PostController extends Controller
 
     public function create(){
         
-
     return view('user.Posts.createpost');
     }
 
@@ -262,7 +264,7 @@ return redirect()->route('user.home');
 
             return response()->json([
                 "status" => true,
-                'msg' => 'Reomve Like '
+                'msg' => 'Remove Like '
             ]);
 
         }
@@ -283,14 +285,98 @@ return redirect()->route('user.home');
             
                 
             
-                
+            
+            return redirect()->back()->with(['success' => 'Comment Added successfully']);
 
-            }catch(\Exception $ex){
+            
+                }catch(\Exception $ex){
+            DB::rollBack();
+            Alert::error('Error Title', 'Error Message');
+            return redirect()->route('user.home');
+
+            }
+
+        }
+
+
+        public function editcomment(Request $req){
+
+            $data=[];
+            $data['comm']=Comment::with('post')->find($req->id);
+
+        $data['post']=Post::with('user','images')->withCount('comments')->withCount('like')->find($data['comm']->post->id);
+
+        $data['comments']=Comment::with('user')->Where('post_id',$data['post']->id)->get();
+        
+
+            return view('user.Posts.single',$data);
+            
+        }
+
+
+
+        public function updatecomment(CommentRequest $req){
+            
+            $data['comment']=Comment::with('post')->find($req->id);
+
+
+            if(!$data['comment'])
+            return redirect()->route('show.single.post')->with(['error'=>'This Comment Does Not Exist']);
+            
+
+
+            $data['comment']->update(['comment'=>$req->comment]);
+
+
+
+    return redirect()->route('show.single.post',$data['comment']->post->id);        
+
+        }
+
+
+        public function replaycommentform(Request $req){
+
+            $data=[];
+            $data['comm']=Comment::with('post')->find($req->id);
+
+        $data['post']=Post::with('user','images')->withCount('comments')->withCount('like')->find($data['comm']->post->id);
+
+        $data['comments']=Comment::with('user')->Where('post_id',$data['post']->id)->get();
+        
+
+            return view('user.Posts.single',$data);
+            
+        }
+
+
+        public function replaycomment(Request $req){
+            
+            try{
+                
+                $comment=Comment::create([
+                    'parent_id'=>$req->parent_id,
+                    'comment'=>$req->replay,
+                    'post_id'=>$req->post_id,
+                    'user_id'=>auth()->id()
+                ]);
+            
+                
+            
+            
+            return redirect()->route('show.single.post',$req->post_id);
+
+            
+                }catch(\Exception $ex){
+            DB::rollBack();
+            Alert::error('Error Title', 'Error Message');
+            return redirect()->route('user.home');
 
             }
         }
 
+
         public function destroycomment($id){
+            
             $comment=Comment::find($id);
 
             if(!$comment)

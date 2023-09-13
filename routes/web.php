@@ -115,9 +115,19 @@ Route::group(['prefix'=>'Post'],function(){
 
 
 
-    Route::post('comment','PostController@comment')->name('comment.post');//Ajax
+    Route::post('comment','PostController@comment')->name('comment.post');
 
-    Route::get('dltcomment/{id}','PostController@destroycomment')->name('dlt.comment');//Ajax
+    Route::get('editcomment/{id}','PostController@editcomment')->name('edit.comment');
+
+    Route::post('updatecomment','PostController@updatecomment')->name('update.comment');
+
+    Route::get('Replay A Comment/{id}','PostController@replaycommentform')->name('get.replay.comment');//Ajax
+
+
+    Route::post('replaycomment','PostController@replaycomment')->name('replay.comment');
+
+
+    Route::get('dltcomment/{id}','PostController@destroycomment')->name('user.dlt.comment');//Ajax
 
     
 

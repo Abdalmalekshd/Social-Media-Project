@@ -24,7 +24,8 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id'   =>'required|exists:posts,id',
+            'id'        =>'required|exists:comments,id',
+            'post_id'   =>'exists:posts,id',
             'comment'   =>'required|max:100',
             
         ];
@@ -35,7 +36,9 @@ class CommentRequest extends FormRequest
     public function messages()
     {
         return [
-            
+            'id.required'=>__('messages.userid'),
+            'id.exists'=>__('messages.userid'),
+
             'comment.required'=>__('messages.comment_Required'),
             'comment.max'=>__('messages.comment_max'),
         ];

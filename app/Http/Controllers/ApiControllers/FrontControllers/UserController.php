@@ -27,9 +27,9 @@ class UserController extends ResponseController
         $data['post']=Post::with('images','user')->whereHas('images',function($img){
             $img->select('photo');
         })->withCount('comments')->withCount('like')->whereHas('user')->where('user_id',$data['user']->id)->get();
-        
 
-        
+
+
         //if The Current User Follow The User That He Enetred His Profile
     $data['follower']=Follower::where('user_id',Auth::user()->id)->where('followed_id',$id)->where('status',0)->first();
 
@@ -52,7 +52,7 @@ class UserController extends ResponseController
     }
 
     public function follow(Request $req){
-        
+
         $user=User::find($req->id);
 
         if(!$user)
@@ -70,7 +70,7 @@ class UserController extends ResponseController
 
     }
     }
-    
+
     public function cancelfollow(Request $req){
         $follower=Follower::where('user_id',Auth::user()->id)->where('followed_id',$req->id)->first();
 
@@ -109,22 +109,22 @@ class UserController extends ResponseController
 
         if(!$unblock)
         return $this->sendError('You Did Not Block '. User::where('id',$req->id)->first()->name);
-        
-    
+
+
         $unblock->update([
             'status' => 0,
         ]);
 
         return $this->sendResponse(User::where('id',$req->id)->first(),'You UnBlocked '.User::where('id',$req->id)->first()->name);
-        
-    
+
+
     }
 
 
 
 public function report(Request $req){
 
-    
+
 try{
     DB::beginTransaction();
     $data=[];
@@ -159,7 +159,7 @@ try{
 }
     }else{
     $id=$req->commentId;
-    
+
     if(Comment::where('id',$req->commentId)->first()){
 
     $data['comment']=Report::create([
@@ -201,10 +201,10 @@ public function users(){
 
 
 public function search(Request $req){
-    $data['user'] = User::where(DB::raw('concat(name," ",phone)') , 'LIKE' , '%' . $req->search . '%')->get();
-    
+    $data['user'] = User::where(DB::raw('concat(name," ",phone)') , 'LIKE' , '%' . $req->search . '%')->where('id','!=',auth()->id())->get();
 
-    return $this->sendResponse($data,'We Found '. User::where(DB::raw('concat(name," ",phone)') , 'LIKE' , '%' . $req->search . '%')->count() . ' Result For You');
+
+    return $this->sendResponse($data,'We Found '. User::where(DB::raw('concat(name," ",phone)') , 'LIKE' , '%' . $req->search . '%')->where('id','!=',auth()->id())->count() . ' Result For You');
 
 
 }
@@ -212,7 +212,7 @@ public function search(Request $req){
 
 public function userlogout(){
     auth('web')->logout();
-    
+
     return $this->sendResponse('','You Just Logged Out Please Login To Get To Your Account');
 
     }

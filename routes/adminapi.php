@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('admin_login','App\Http\Controllers\ApiControllers\AdminControllers\LoginController@adminsignup')->name('admin.login');
+Route::post('admin_login','App\Http\Controllers\ApiControllers\AdminControllers\LoginController@adminsignin')->name('admin.login');
 
 Route::middleware('auth:adminapi')->namespace('App\Http\Controllers\ApiControllers\AdminControllers')->group(function () {
 
@@ -21,12 +21,8 @@ Route::middleware('auth:adminapi')->namespace('App\Http\Controllers\ApiControlle
         return $request->user();
     });
 
-//User Routes
+//Admin Routes
 
-
-
-
-    
 
 ################### End Login & SignUp Routes  #######################
 
@@ -56,7 +52,7 @@ Route::middleware('auth:adminapi')->namespace('App\Http\Controllers\ApiControlle
 });
 ############################ End User Routes ###################################
 
-    
+
 
 
 

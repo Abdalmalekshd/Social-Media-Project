@@ -4,6 +4,7 @@
   <?php
     $search='';
   ?>
+
 <div class="col-md-9 col-lg-10 main">
 
     <h1 class="display-2 hidden-xs-down text-center">
@@ -65,11 +66,11 @@
       </div>
     </div>
     <!--/row-->
-    
+
     <hr>
     <div class="row mb-3">
 <h1 class="text-center" style="margin-left: 450px">Last 5 Users</h1>
-      
+
 
 <div id="success_msg" class="alert alert-danger text-center userdel"  style="display: none;">
   User Deleted Successfully
@@ -80,7 +81,7 @@
           <table class="table table-striped">
             <thead class="thead-inverse">
               <tr>
-                  
+
                 <th class="text-center">Avatar</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Email</th>
@@ -118,18 +119,18 @@
 
               </tr>
               @endforeach
-              
+
             </tbody>
-            
+
           </table>
-          
+
         </div>
       </div>
     </div>
     <!--/row-->
 
 
-    
+
 <h1 class="text-center">Last 5 Posts</h1>
 
 <div id="delpost_success_msg" class="alert alert-danger text-center postdel" style="display: none;">
@@ -141,7 +142,7 @@
         <table class="table table-striped">
           <thead class="thead-inverse">
             <tr>
-                
+
               <th class="text-center">Content</th>
               <th class="text-center">Image</th>
               <th class="text-center">User</th>
@@ -165,9 +166,9 @@
               <td>
       <img src="{{ url('Images/Posts/',$img->photo) }}" alt=""  style="width:50px;height:50px">
               </td>
-                
+
             @empty
-        
+
             @endforelse
             <td>{{ $post->user->name }}</td>
               <td>{{ $post->images_count }}</td>
@@ -179,11 +180,11 @@
 
             </tr>
             @endforeach
-            
+
           </tbody>
-          
+
         </table>
-        
+
       </div>
     </div>
 
@@ -199,7 +200,7 @@
         <table class="table table-striped">
           <thead class="thead-inverse">
             <tr>
-                
+
               <th class="text-center">Content</th>
               <th class="text-center">Parent</th>
               <th class="text-center">Post</th>
@@ -216,7 +217,9 @@
               <td class="text-center">
                 {{ $comment->comment }}
             </td>
-            <td class="text-center"></td>
+            <td class="text-center">
+                {{ $comment->parent_id }}
+            </td>
 
               <td class="text-center">{{ $comment->post->content }}</td>
               <td class="text-center">{{ $comment->user->name }}</td>
@@ -225,11 +228,11 @@
 
             </tr>
             @endforeach
-            
+
           </tbody>
-          
+
         </table>
-        
+
       </div>
     </div>
 
@@ -244,7 +247,7 @@
         <table class="table table-striped">
           <thead class="thead-inverse">
             <tr>
-                
+
               <th class="text-center">Reason</th>
               <th class="text-center">Post</th>
               <th class="text-center">User</th>
@@ -263,7 +266,7 @@
               <td class="text-center">
                 {{ $report->reason }}
             </td>
-            
+
               @if(isset($report->post->content))
               <td class="text-center">{{ $report->post->content }}</td>
               @else
@@ -286,20 +289,20 @@
 
               @endif
 
-              <td class="text-center">{{ $report->created_at }}</td> 
-              
-              <td class="text-center">{{ $report->userwhoreported->name }}</td> 
-              
+              <td class="text-center">{{ $report->created_at }}</td>
+
+              <td class="text-center">{{ $report->userwhoreported->name }}</td>
+
               <td class="text-center"><button  report_id='{{ $report->id }}' class="btn btn-danger deletereport">Delete</button></td>
 
 
             </tr>
             @endforeach
-            
+
           </tbody>
-          
+
         </table>
-        
+
       </div>
     </div>
 
@@ -312,7 +315,7 @@
             </h4>
       </div>
       </div>
-      
+
     </div>
 
     <div class="col-lg-3 col-md-4">
@@ -324,7 +327,7 @@
           </h4>
       </div>
       </div>
-      
+
     </div>
 
     <div class="col-lg-3 col-md-4">
@@ -337,7 +340,7 @@
           </h4>
       </div>
       </div>
-      
+
     </div>
 
     <div class="col-lg-3 col-md-4">
@@ -346,13 +349,13 @@
       <div class="card-block">
           <h4 class="card-title text-center">
             {{ $comments_per_day}}
-            
+
           </h4>
       </div>
       </div>
-      
+
     </div>
-    
+
     </div>
 
   </div>
@@ -368,13 +371,13 @@
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 <script>
-//Delete Post 
+//Delete Post
 
   $(document).on('click','.deletepost',function(e){
       e.preventDefault();
 
       let PostId=$(this).attr('post_id');
-      
+
   $.ajax({
       type: 'post',
       url: "{{ route('dlt.post') }}",
@@ -390,7 +393,7 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
           }
           $('.postrow'+data.id).remove();
       },
-      
+
       error: function (reject) {
           var response = $.parseJSON(reject.responseText);
           $.each(response.errors, function (key, val) {
@@ -400,12 +403,12 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
   });
 });
 
-//Delete User 
+//Delete User
 $(document).on('click','.deleteuser',function(e){
       e.preventDefault();
 
       let UserId=$(this).attr('user_id');
-      
+
   $.ajax({
       type: 'post',
       url: "{{ route('dlt.user') }}",
@@ -421,7 +424,7 @@ $(document).on('click','.deleteuser',function(e){
           }
           $('.userrow'+data.id).remove();
       },
-      
+
       error: function (reject) {
           var response = $.parseJSON(reject.responseText);
           $.each(response.errors, function (key, val) {
@@ -433,14 +436,14 @@ $(document).on('click','.deleteuser',function(e){
 
 
 
-//Delete Comment 
+//Delete Comment
 
 
 $(document).on('click','.deletecomment',function(e){
       e.preventDefault();
 
       let CommentId=$(this).attr('comment_id');
-      
+
   $.ajax({
       type: 'post',
       url: "{{ route('dlt.comment') }}",
@@ -456,7 +459,7 @@ $(document).on('click','.deletecomment',function(e){
           }
           $('.commentrow'+data.id).remove();
       },
-      
+
       error: function (reject) {
           var response = $.parseJSON(reject.responseText);
           $.each(response.errors, function (key, val) {
@@ -472,7 +475,7 @@ $(document).on('click','.deletereport',function(e){
       e.preventDefault();
 
       let ReportId=$(this).attr('report_id');
-      
+
   $.ajax({
       type: 'post',
       url: "{{ route('dlt.report') }}",
@@ -488,7 +491,7 @@ $(document).on('click','.deletereport',function(e){
           }
           $('.reportrow'+data.id).remove();
       },
-      
+
       error: function (reject) {
           var response = $.parseJSON(reject.responseText);
           $.each(response.errors, function (key, val) {

@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Mail;
 
 class LoginController extends ResponseController
 {
-    
-    
-    public function adminsignup(Request $req){
-    
+
+
+    public function adminsignin(Request $req){
+
     if(auth()->guard('admin')->attempt(['email'=>$req->email,'password'=>$req->password])){
         $token = auth('admin')->user()->createToken('MyApp')->accessToken;
 
@@ -24,11 +24,11 @@ class LoginController extends ResponseController
     }
     return $this->sendError('Please Check Your Data');
 
-    
+
     }
 
 
-   
+
 
             public function forgetpassword(Request $req){
                 $data=[];
@@ -39,13 +39,13 @@ class LoginController extends ResponseController
                 Mail::send('Admin.Mail.forgetpassword', $data, function($message) use($data){
 
                     $message->to($data['admin']->email)->subject('Reset Password');
-                
+
                 });
-                
-                
+
+
                 return redirect()->route('Admin.forgetpass');
                     }
-            
+
 
             public function Resetpass($email){
                 $admin=Admin::where('email',$email)->first();
@@ -66,9 +66,9 @@ class LoginController extends ResponseController
 
     public function adminlogout(){
         auth('admin')->logout();
-        
+
         return $this->sendResponse('','You Logged Out');
-        
-        
+
+
         }
 }

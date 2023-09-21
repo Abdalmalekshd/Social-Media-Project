@@ -30,20 +30,20 @@ Route::group(['namespace'=>'App\Http\Controllers\ApiControllers\FrontControllers
 
     Route::get('/home','HomeController@home')->name('user.home');
 
-    
+
 ############################ Start Profile Routes ###################################
-    
+
     Route::get('/MyProfile','ProfileController@Myprofile')->name('user.profile');//Logged In User Profile
 
 
-    
+
     Route::post('Update-Profile/{id}','ProfileController@updateProfile')->name('user.profile.update');
 
     Route::delete('delete-Profile/{id}','ProfileController@deleteProfile')->name('user.profile.dlt');
 
     Route::delete('delete-avatar/{id}','ProfileController@deleteProfileAvatar')->name('user.avatar.dlt');
-    
-    
+
+
     Route::post('changepassword','ProfileController@changeoldpassword')->name('changeoldpassword');
 
 ############################ End Profile Routes ###################################
@@ -52,11 +52,11 @@ Route::group(['namespace'=>'App\Http\Controllers\ApiControllers\FrontControllers
 ############################ Start Post Routes ###################################
 
 
-    Route::post('single/{id}','PostController@showpost')->name('show.single.post');
+    Route::get('single/{id}','PostController@showpost')->name('show.single.post');
 
     Route::post('store','PostController@store')->name('store.post');
 
-    
+
 
     Route::post('update/{id}','PostController@update')->name('update.post');
 
@@ -70,14 +70,18 @@ Route::group(['namespace'=>'App\Http\Controllers\ApiControllers\FrontControllers
 
     Route::post('User/Bookmark/dlt','PostController@DeletebookmarkedPosts')->name('delete.bookmarked.post');//Ajax
 
-    
+
 
     Route::post('like','PostController@like')->name('like.post');
 
 
     Route::post('comment/{id}','PostController@comment')->name('comment.post');
 
-    Route::get('dltcomment/{id}','PostController@destroycomment')->name('dlt.comment');//Ajax
+    Route::post('updatecomment/{id}','PostController@updatecomment')->name('update.comment');
+
+    Route::post('replaycomment/{id}','PostController@replaycomment')->name('replay.comment');
+
+    Route::delete('dltcomment/{id}','PostController@destroycomment')->name('dlt.comment');//Ajax
 
 
 ############################ End Post Routes ###################################
@@ -89,9 +93,9 @@ Route::group(['namespace'=>'App\Http\Controllers\ApiControllers\FrontControllers
     Route::get('Profile/{id}','UserController@UserProfile')->name('Show.User.Profile');
 
     Route::post('follow','UserController@follow')->name('User.follow');
-    
+
     Route::post('cancelfollow','UserController@cancelfollow')->name('User.follow.cancel');
-    
+
 
     Route::post('Block','UserController@Block')->name('User.block');
 

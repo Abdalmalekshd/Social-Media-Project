@@ -28,7 +28,7 @@ Route::group(['namespace'=>'App\Http\Controllers\FrontControllers','middleware'=
     Route::get('login','LoginController@getLoginPage')->name('get.login');
 
     Route::post('login','LoginController@Login')->name('login');
-    
+
     Route::get('signup','LoginController@getSigninPage')->name('signup');
 
     Route::post('Createaccount','LoginController@Signin')->name('create.account');
@@ -44,7 +44,7 @@ Route::group(['namespace'=>'App\Http\Controllers\FrontControllers','middleware'=
     Route::post('setnewPassword','LoginController@setnewpass')->name('setnewpass');
 
     });
-    
+
 
 ################### End Login & SignUp Routes  #######################
 
@@ -63,7 +63,7 @@ Route::group(['middleware'=>'auth:web'],function(){
     Route::post('/mark-as-read', 'HomeController@markNotification')->name('markNotification');
 ############################ Start Profile Routes ###################################
 Route::group(['prefix'=>'Profile'],function(){
-    
+
     Route::get('/MyProfile','ProfileController@Myprofile')->name('user.profile');//Logged In User Profile
 
 
@@ -75,8 +75,8 @@ Route::group(['prefix'=>'Profile'],function(){
     Route::get('delete-Profile/{id}','ProfileController@deleteProfile')->name('user.profile.dlt');
 
     Route::get('delete-avatar/{id}','ProfileController@deleteProfileAvatar')->name('user.avatar.dlt');
-    
-    
+
+
     Route::get('changePassword','ProfileController@changePassword')->name('changePassword');
 
     Route::post('changeoldpassword','ProfileController@changeoldpassword')->name('changeoldpassword');
@@ -107,7 +107,7 @@ Route::group(['prefix'=>'Post'],function(){
 
     Route::post('User/Bookmark/dlt','PostController@DeletebookmarkedPosts')->name('delete.bookmarked.post');//Ajax
 
-    
+
 
     Route::post('like','PostController@like')->name('like.post');
 
@@ -117,11 +117,10 @@ Route::group(['prefix'=>'Post'],function(){
 
     Route::post('comment','PostController@comment')->name('comment.post');
 
-    Route::get('editcomment/{id}','PostController@editcomment')->name('edit.comment');
 
-    Route::post('updatecomment','PostController@updatecomment')->name('update.comment');
+    Route::post('updatecomment/{id}','PostController@updatecomment')->name('update.comment');
 
-    Route::get('Replay A Comment/{id}','PostController@replaycommentform')->name('get.replay.comment');//Ajax
+    Route::get('Replay A Comment','PostController@replaycommentform')->name('get.replay.comment');//Ajax
 
 
     Route::post('replaycomment','PostController@replaycomment')->name('replay.comment');
@@ -129,7 +128,7 @@ Route::group(['prefix'=>'Post'],function(){
 
     Route::get('dltcomment/{id}','PostController@destroycomment')->name('user.dlt.comment');//Ajax
 
-    
+
 
 
 });
@@ -143,9 +142,9 @@ Route::group(['prefix'=>'User'],function(){
     Route::get('Profile/{id}','UserController@UserProfile')->name('Show.User.Profile'); //others Users
 
     Route::post('follow','UserController@follow')->name('User.follow');
-    
+
     Route::post('cancelfollow','UserController@cancelfollow')->name('User.follow.cancel');
-    
+
 
     Route::post('Block','UserController@Block')->name('User.block');
 

@@ -11,17 +11,40 @@
       <li class="social">
         <a href="#" class="Notifications" onclick="NotifyToggle();"  title=""><i class="fa fa-bell-o fa-lg"></i></a>
         <span class='Notifications-count'>{{ auth()->user()->unreadNotifications->count() }}</span>
-      
+
       <div class="notify">
-        
+
         @forelse(auth()->user()->unreadNotifications as $notification)
         <div class="alert" role="alert" style="color: black;background-color:rgb(107, 105, 105)" role="alert">
-          <a href="{{ route('show.single.post',$notification->data['post_id']) }}">[{{ $notification->created_at }}] <br>   {{ $notification->data['post_creater'] }} Added New Post 
-          {{ $notification->data['post_content'] }} </a>
+            @if ($notification->type == 'App\Notifications\NewPostNotify')
+          <a href="{{ route('show.single.post',$notification->data['post_id']) }}">[{{ $notification->created_at }}] <br>   {{ $notification->data['post_creater'] }} Added New Post
+            {{ $notification->data['post_content'] }} </a>
 
-          <a href="#" class="float-right mark-as-read" style="" data-id="{{ $notification->id }}">
-            Mark as read
-        </a>
+            <a href="#" class="float-right mark-as-read" style="" data-id="{{ $notification->id }}">
+              Mark as read
+          </a>
+          @elseif ($notification->type == 'App\Notifications\NewCommentNotify')
+          <a href="{{ route('show.single.post',$notification->data['commented_post_id']) }}">[{{ $notification->created_at }}] <br>   {{ $notification->data['comment_creater'] }} Added New Comment
+           In Your Post {{ $notification->data['commented_post_content'] }} </a>
+
+            <a href="#" class="float-right mark-as-read" style="" data-id="{{ $notification->id }}">
+              Mark as read
+          </a>
+
+          @elseif ($notification->type == 'App\Notifications\NewCommentReplayNotify')
+          <a href="{{ route('show.single.post',$notification->data['post_commented_id']) }}">[{{ $notification->created_at }}] <br>   {{ $notification->data['commented_user'] }} Replied To Your Comment
+            {{ $notification->data['parent_comment'] }}  In  Post {{ $notification->data['post_commented'] }} </a>
+
+            <a href="#" class="float-right mark-as-read" style="" data-id="{{ $notification->id }}">
+              Mark as read
+          </a>
+
+          @endif
+
+
+
+
+
     </div>
     @if($loop->last)
     <a href="#" id="mark-all">
@@ -34,15 +57,15 @@
 </li>
   </div>
         <li class="social profile" onclick="menuToggle();" >
-          
+
           <a href="#">
                 <i class="fa fa-user"></i>
               </a>
-    
+
             <div class="menu">
                 <h3>
                     {{ __('messages.wlc') }} {{ \App\Models\User::Where('id',auth()->id())->first()->name }}
-                    
+
                 </h3>
                 <ul>
                   <a href="{{ route('user.profile') }}"><li>
@@ -53,12 +76,12 @@
                       <a href="{{ route('logout') }}"><li>
                         {{ __('messages.lg') }}
                     </li></a>
-                    
+
                 </ul>
             </div>
 
       </li>
-      
+
     </ul>
   </nav>
 

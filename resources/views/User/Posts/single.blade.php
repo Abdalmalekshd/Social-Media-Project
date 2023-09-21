@@ -2,7 +2,7 @@
 
 @section('content')
 
-<?php 
+<?php
 $Nosidebar='';
 ?>
 
@@ -13,9 +13,9 @@ $Nosidebar='';
             <a href="{{ route('Show.User.Profile',$post->user->id) }}">@if(!$post->user->avatar)
         <img src="{{ url('img.png') }}" alt="">
             @else
-        <img src="{{ url('Images/avatar/', $post->user->avatar)}}" class="" alt=""> 
+        <img src="{{ url('Images/avatar/', $post->user->avatar)}}" class="" alt="">
             @endif
-            
+
             <span>{{ $post->user->name }}</span> </a>
             <div class="post-time" style="margin-top:-53px">
                 @if( \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->diffInDays(\Carbon\Carbon::now()) > 30)
@@ -29,11 +29,11 @@ $Nosidebar='';
                 @else
                 {{  \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->diffInHours(\Carbon\Carbon::now())}}Hours
                 @endif
-    
+
                 @endif
-                
+
                 @endif
-            </div>    
+            </div>
         </div>
                         <!-- three dot menu -->
                         <div class="postoptions1">
@@ -41,9 +41,9 @@ $Nosidebar='';
                             <ul class="icons btn-right showLeft" >
                                 @if ($post->user_id == Auth::user()->id)
                                 <a href="{{ route('edit.post',$post->id) }}" title="{{ __('messages.edit') }}"><li>
-                                    {{ __('messages.edit') }}               
-                                
-                                </li></a>    
+                                    {{ __('messages.edit') }}
+
+                                </li></a>
 
                                 <a href="{{ route('delete.post',$post->id)}}" >
                                     <li title="{{ __('messages.dlt') }}">
@@ -52,52 +52,52 @@ $Nosidebar='';
                                 </li></a>
                                 @else
                                 <a href="{{ route('get.report',$post->id) }}" ><li title="{{ __('messages.report') }}">
-                                    {{ __('messages.report') }}                    
+                                    {{ __('messages.report') }}
 
-                                </li></a>  
+                                </li></a>
                 @if( \App\models\Follower::where('user_id',Auth::user()->id)->where('followed_id',$post->user->id)->first())
 
             <button user_id='{{$post->user->id}}' title="{{ __('messages.unfllw') }} " class="unfollow"><li> {{ __('messages.unfllw') }}  </li>
-                                    
+
             @else
             <button  user_id='{{ $post->user->id }}' class="btn btn-primary followbtn">{{ __('messages.fllw') }}</button>
             @endif
 
                                 </a>
                                     @endif
-                                
-                                
+
+
                             </ul>
-                        
+
                         </div>
 
-                        
+
 
 @foreach ($post->images as $image)
-@if($image->post_id == $post->id ) 
-    
-<div class="post-img-author-description"><img src="{{ url('Images/posts/' . $image->photo)}}" class="img-thumbnail" alt=""> 
+@if($image->post_id == $post->id )
+
+<div class="post-img-author-description"><img src="{{ url('Images/posts/' . $image->photo)}}" class="img-thumbnail" alt="">
 @endif
-            
+
 @endforeach
-                
-            
+
+
         <p>{{ $post->content }}</p></div>
     <div class="reactian1">
         @if( \App\Models\Like::where('post_id',$post->id)->Where('user_id',auth()->id())->first())
             <button post_id='{{ $post->id }}'  class="unlikepost" title="unlike"><i class="fa fa-heart" style="color: red"></i></button> <span> {{ $post->like_count }} {{ __('messages.like') }}</span>
-            
+
             @else
             <button post_id='{{ $post->id }}' class="likepost"   title="like"><i class="fa fa-heart-o"></i></button> <span>{{ $post->like_count }} {{ __('messages.like') }}</span>
-            
+
             @endif
-        
-        
+
+
         <a href=""><i class="fa fa-comment-o"></i></a><span>{{ $post->comments_count }} {{ __('messages.comment') }}</span>
 
 
-        
-            
+
+
             @if(\App\Models\BookmarkPost::where('post_id',$post->id)->where('user_id',Auth::user()->id)->first())
             <button post_id='{{ $post->id }}' class="dltbookmarkpost" ><i class="fa fa-bookmark"></i></button>
             @else
@@ -117,7 +117,8 @@ $Nosidebar='';
         @foreach ($comments as $comment)
         <div class="comment">
         <div class="commenter-info">
-            <a href="{{ route('Show.User.Profile',$comment->user->id) }}" style="text-decoration:none;margin-left: -400px;color:white;">@if($comment->user->avatar)
+            <a href="{{ route('Show.User.Profile',$comment->user->id) }}" style="text-decoration:none;margin-left: -400px;color:white;">
+                @if($comment->user->avatar)
             <img src="{{ url('Images/Avatar/', $comment->user->avatar)}}" class="rounded-circle" alt="">
             @else
             <img src="{{ url('img.png')}}" class="rounded-circle" alt="">
@@ -125,12 +126,11 @@ $Nosidebar='';
             @endif
             {{ $comment->user->name }}</div></a>
         <span>{{ $comment->comment }}</span>
-        
-        {{-- @if(! $comment->parent_id == null)
-        <span>{{ $comment->comment }}</span>
-        @endif --}}
+
+</div>
         <div class="editcommentbtn">
             @if($post->user_id == auth()->id() || $comment->user_id == auth()->id())
+
         <a href="{{ route('user.dlt.comment',$comment->id) }}" class="fa fa-close text-danger dlt">{{ __('messages.dlt') }}</a>
         @endif
         @if($comment->user_id == auth()->id())
@@ -140,15 +140,20 @@ $Nosidebar='';
 
         <a id="open-comm1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#comment1"></a>
 
+        <a href="{{ route('get.replay.comment', $comment->id) }}"
+            class="fa-solid fa-user-pen
+            text-primary rounded-pill border border-0  replay">{{ __('messages.replay') }}</a>
 
-        
-</div>
+        <a id="open-replay1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#replay1"></a>
+
+
 
 @else
-<div class="editcommentbtn">
+
+
 
 <a href="{{ route('get.report',$comment->id) }}" class="text-danger report">{{ __('messages.report') }}</a>
-<a href="" class="text-primary "></a>
+
 
 <a href="{{ route('get.replay.comment', $comment->id) }}"
     class="fa-solid fa-user-pen
@@ -158,31 +163,98 @@ $Nosidebar='';
 
 </div>
 
-        @endif
-        
-            
 
-        
-        @endforeach
+        @endif
     </div>
 
-    
+
+        <div class="replaycomments">
+            @isset($comment -> childrens)
+
+            <div class="row">
+                <div class="col-md-12 comments">
+
+                    @foreach($comment -> childrens as $childern)
+                    <div class="comment">
+                    <div class="commenter-info">
+                       <h5 class="text-center">Replays To {{ $comment->user->name }} Comment </h5>
+                         <a href="{{ route('Show.User.Profile',$childern->user->id) }}" style="text-decoration:none;margin-left: -400px;color:white;">
+                            @if($childern->user->avatar)
+                        <img src="{{ url('Images/Avatar/', $childern->user->avatar)}}" class="rounded-circle" alt="">
+                        @else
+                        <img src="{{ url('img.png')}}" class="rounded-circle" alt="">
+
+                        @endif
+                        {{ $childern ->user->name }}</div></a>
+                    <span>{{ $childern->comment }}</span>
+
+                    <div class="editcommentbtn">
+                        @if($post->user_id == auth()->id() || $comment->user_id == auth()->id() || $childern->user_id == auth()->id())
+
+                    <a href="{{ route('user.dlt.comment',$childern->id) }}" class="fa fa-close text-danger dlt">{{ __('messages.dlt') }}</a>
+                    @endif
+                    @if($comment->user_id == auth()->id())
+                    <a href="{{ route('edit.comment', $childern->id) }}"
+                        class="fa-solid fa-user-pen
+                        text-primary rounded-pill border border-0 edit">{{ __('messages.edit') }}</a>
+
+                    <a id="open-comm1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#comment1"></a>
+
+                    <a href="{{ route('get.replay.comment', $childern->id) }}"
+                        class="fa-solid fa-user-pen
+                        text-primary rounded-pill border border-0  replay">{{ __('messages.replay') }}</a>
+
+                    <a id="open-replay1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#replay1"></a>
+
+
+
+            @else
+
+
+
+            <a href="{{ route('get.report',$childern->id) }}" class="text-danger report">{{ __('messages.report') }}</a>
+
+
+            <a href="{{ route('get.replay.comment', $childern->id) }}"
+                class="fa-solid fa-user-pen
+                text-primary rounded-pill border border-0  replay">{{ __('messages.replay') }}</a>
+
+            <a id="open-replay1-btn" class="d-none" data-bs-toggle="modal" data-bs-target="#replay1"></a>
+
+
+
+                    @endif
+                </div>
+
+
+
+                @endforeach
+        @endisset
+
+<hr>
+
+        @endforeach
+
+
+    </div>
+
+
     <div class="col-md-12 comment-form">
     <form action="{{ route('comment.post') }}" method="POST" class="form-comment">
         @csrf
     <input type="hidden" name="post_id"  value="{{ $post->id }}">
 
     <input type="text" name="comment" class="comment-input" placeholder="{{ __('messages.putacomment') }}">
-    
+
 
     <button class="btn btn-success" title="comment"><i class="fa fa-send"></i></button>
     <br>
     @error('comment')
     <div  class="alert alert-danger text-center">{{ $message }}</div>
     @enderror
-    
-    
-    
+
+
+
     @if (Session::has('success'))
     <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
 @endif
@@ -199,7 +271,7 @@ $Nosidebar='';
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="hedar">
-                
+
                 <label class="ms-3 mt-3">
                     <h3>Edit Your Comment</h3>
                 </label>
@@ -212,8 +284,8 @@ $Nosidebar='';
                 <form id="FormUpdate" method="POST" action="{{ route('update.comment') }}">
                     @csrf
 
-                    <input type="hidden" name="id" value="{{ $comm->id }}" class="d-none" />
-                    @error('id')
+                    <input type="hidden" name="comment_id" value="{{ $comm->id }}" class="d-none" />
+                    @error('comment_id')
                     <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                     <div class="form-group">
@@ -226,7 +298,7 @@ $Nosidebar='';
                     </div>
 
 
-                    
+
 
 
                     <div class="modal-footer col-sm-12">
@@ -246,8 +318,8 @@ $Nosidebar='';
 </div>
 @endif
 
-{{-- Replay Form --}}
-@if ($comm)
+ {{--  Replay Form  --}}
+@if ($comme)
 <div class="modal
                         fade border border-3 shadow-lg" id="replay1"
     aria-hidden="false">
@@ -256,7 +328,7 @@ $Nosidebar='';
             <div class="hedar">
 
                 <label class="ms-3 mt-3">
-                    <h3>Replay To {{ $comm->user->name }} Comment</h3>
+                    <h3>Replay To {{ $comme->user->name }} Comment</h3>
                 </label>
                 <hr width=100% color=#898585>
             </div>
@@ -267,20 +339,20 @@ $Nosidebar='';
                 <form  method="POST" action="{{ route('replay.comment') }}">
                     @csrf
 
-                    <input type="hidden" name="parent_id" value="{{ $comm->id }}" class="d-none" />
+                    <input type="hidden" name="parent_id" value="{{ $comme->id }}" class="d-none" />
                     @error('parent_id')
                     <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
 
-                            
-                    <input type="hidden" name="post_id" value="{{ $comm->post->id }}" class="d-none" />
+
+                    <input type="hidden" name="post_id" value="{{ $comme->post->id }}" class="d-none" />
                     @error('post_id')
                     <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
 
                     <div class="form-group">
                         <label for="" class="control-label ps-3">{{ __('messages.replay') }}</label><br>
-                        <input type="text" 
+                        <input type="text"
                             class="form-control ms-1" name='replay' placeholder="Enter Your replay">
                             @error('replay')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -288,7 +360,7 @@ $Nosidebar='';
                     </div>
 
 
-                    
+
 
 
                     <div class="modal-footer col-sm-12">
@@ -318,12 +390,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
 
-    //Start Like Post 
+    //Start Like Post
     $(document).on('click','.likepost',function(e){
         e.preventDefault();
 
         let PostId=$(this).attr('post_id');
-        
+
     $.ajax({
         type: 'post',
         url: "{{ route('like.post') }}",
@@ -337,7 +409,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             }
         },
-        
+
         error: function (reject) {
             var response = $.parseJSON(reject.responseText);
             $.each(response.errors, function (key, val) {
@@ -347,16 +419,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
-    //End Like Post 
+    //End Like Post
 
 
-    //Start UnLike Post 
+    //Start UnLike Post
 
 $(document).on('click','.unlikepost',function(e){
         e.preventDefault();
 
         let PostId=$(this).attr('post_id');
-        
+
     $.ajax({
         type: 'post',
         url: "{{ route('delete.like.post') }}",
@@ -370,7 +442,7 @@ $(document).on('click','.unlikepost',function(e){
 
             }
         },
-        
+
         error: function (reject) {
             var response = $.parseJSON(reject.responseText);
             $.each(response.errors, function (key, val) {
@@ -380,14 +452,14 @@ $(document).on('click','.unlikepost',function(e){
     });
 });
 
-    //End UnLike Post 
+    //End UnLike Post
 
-//Start Bookmark Post 
+//Start Bookmark Post
 $(document).on('click','.bookmarkpost',function(e){
         e.preventDefault();
 
         let PostId=$(this).attr('post_id');
-        
+
     $.ajax({
         type: 'post',
         url: "{{ route('bookmark.post') }}",
@@ -401,7 +473,7 @@ $(document).on('click','.bookmarkpost',function(e){
 
             }
         },
-        
+
         error: function (reject) {
             var response = $.parseJSON(reject.responseText);
             $.each(response.errors, function (key, val) {
@@ -411,16 +483,16 @@ $(document).on('click','.bookmarkpost',function(e){
     });
 });
 
-    //End Bookmark Post 
+    //End Bookmark Post
 
 
-    //Start Delete Bookmarked Post 
+    //Start Delete Bookmarked Post
 
 $(document).on('click','.dltbookmarkpost',function(e){
         e.preventDefault();
 
         let PostId=$(this).attr('post_id');
-        
+
     $.ajax({
         type: 'post',
         url: "{{ route('delete.bookmarked.post') }}",
@@ -434,7 +506,7 @@ $(document).on('click','.dltbookmarkpost',function(e){
 
             }
         },
-        
+
         error: function (reject) {
             var response = $.parseJSON(reject.responseText);
             $.each(response.errors, function (key, val) {
@@ -444,16 +516,16 @@ $(document).on('click','.dltbookmarkpost',function(e){
     });
 });
 
-        //End Delete Bookmarked Post 
+        //End Delete Bookmarked Post
 
 
 
-//Start follow user 
+//Start follow user
 $(document).on('click','.followbtn',function(e){
         e.preventDefault();
 
         let UserId=$(this).attr('user_id');
-        
+
     $.ajax({
         type: 'post',
         url: "{{ route('User.follow') }}",
@@ -467,7 +539,7 @@ $(document).on('click','.followbtn',function(e){
 
             }
         },
-        
+
         error: function (reject) {
             var response = $.parseJSON(reject.responseText);
             $.each(response.errors, function (key, val) {
@@ -477,16 +549,16 @@ $(document).on('click','.followbtn',function(e){
     });
 });
 
-    //End follow user 
+    //End follow user
 
 
-//Start Delete follow user 
+//Start Delete follow user
 
 $(document).on('click','.unfollow',function(e){
         e.preventDefault();
 
         let UserId=$(this).attr('user_id');
-        
+
     $.ajax({
         type: 'post',
         url: "{{ route('User.follow.cancel') }}",
@@ -500,7 +572,7 @@ $(document).on('click','.unfollow',function(e){
 
             }
         },
-        
+
         error: function (reject) {
             var response = $.parseJSON(reject.responseText);
             $.each(response.errors, function (key, val) {

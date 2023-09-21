@@ -28,7 +28,7 @@ Route::group(['namespace'=>'App\Http\Controllers\AdminControllers','prefix'=>'ad
     Route::get('adminlogin','LoginController@adminLogin')->name('admin.get.login');
 
     Route::post('admin_login','LoginController@adminsignup')->name('admin.login');
-    
+
 
     Route::get('admin_ForgetPassword','LoginController@forgetpass')->name('Admin.forgetpass');
 
@@ -40,7 +40,7 @@ Route::group(['namespace'=>'App\Http\Controllers\AdminControllers','prefix'=>'ad
     Route::post('admin_setnewPassword','LoginController@setnewpass')->name('admin.setnewpass');
 
     });
-    
+
 
 ################### End Login & SignUp Routes  #######################
 
